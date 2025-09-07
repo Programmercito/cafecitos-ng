@@ -1,22 +1,11 @@
-// src/app/interceptors/auth-header.interceptor.ts
-import { Injectable } from '@angular/core';
-import {
-  HttpInterceptor,
-  HttpRequest,
-  HttpHandler,
-  HttpEvent
-} from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpInterceptorFn } from '@angular/common/http';
 
-@Injectable()
-export class HeadersRequest implements HttpInterceptor {
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    //const token = 'tu_token_aquí'; // Puedes inyectar un servicio para obtenerlo dinámicamente
-    console.log('Interception in HeadersRequest');
-    const modifiedReq = req.clone({
-    
-    });
+export const headersRequestInterceptor: HttpInterceptorFn = (req, next) => {
+  console.log('Interception in headersRequestInterceptor');
+  
+  const modifiedReq = req.clone({
+    // Aquí puedes clonar y modificar la petición, por ejemplo, para añadir cabeceras
+  });
 
-    return next.handle(modifiedReq);
-  }
-}
+  return next(modifiedReq);
+};
