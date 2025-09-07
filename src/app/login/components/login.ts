@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
@@ -10,13 +10,17 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
 import { Logo } from "@/libs/components/logo/logo";
 import { LoginService } from '../services/login-api';
 import { UserCredentials } from '@/libs/models/UserCredentials';
-
+import { MessageService, ToastMessageOptions } from 'primeng/api';
+import { ToastModule } from "primeng/toast";
+import { MessageModule } from 'primeng/message';
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator, Logo],
+    providers: [MessageService],
+    imports: [ButtonModule, ToastModule, MessageModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator, Logo, ToastModule],
     template: `
         <app-floating-configurator />
+         <p-toast />
         <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-screen overflow-hidden">
             <div class="flex flex-col items-center justify-center">
                 <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
@@ -38,7 +42,7 @@ import { UserCredentials } from '@/libs/models/UserCredentials';
   
                                 </div>
                             </div>
-                            <p-button label="Sign In" styleClass="w-full" routerLink="/" (click)="handleLogin()"></p-button>
+                            <p-button label="Sign In" styleClass="w-full" (click)="handleLogin()"></p-button>
                         </div>
                     </div>
                 </div>
@@ -47,7 +51,10 @@ import { UserCredentials } from '@/libs/models/UserCredentials';
     `
 })
 export class Login {
-    constructor(private loginService: LoginService) {
+    constructor(private loginService: LoginService,
+        private messageservice: MessageService,
+        private router: Router
+    ) {
 
     }
 
@@ -60,9 +67,14 @@ export class Login {
         this.loginService.login(credentials).subscribe({
             next: (user) => {
                 console.log('Login successful:', user);
+                sessionStorage.setItem("user", JSON.stringify(user));
+                this.router.navigate(['/']);
             },
             error: (error) => {
                 console.error('Login failed:', error);
+                sessionStorage.removeItem("user");
+                this.messageservice.add({ severity: 'error', summary: 'Error', detail: 'login failed' });
+
             }
         });
 
