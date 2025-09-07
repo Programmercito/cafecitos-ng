@@ -63,10 +63,10 @@ export class Login {
             username: this.username,
             password: this.password
         }
-        console.log(credentials);
+        
         this.loginService.login(credentials).subscribe({
             next: (user) => {
-                console.log('Login successful:', user);
+                
                 sessionStorage.setItem("user", JSON.stringify(user));
                 this.router.navigate(['/']);
             },
