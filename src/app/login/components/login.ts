@@ -7,7 +7,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
-import { Logo } from "@/shared/components/logo/logo";
+import { Logo } from "@/libs/components/logo/logo";
+import { LoginService } from '../services/login-api';
+import { UserCredentials } from '@/libs/models/UserCredentials';
 
 @Component({
     selector: 'app-login',
@@ -25,8 +27,8 @@ import { Logo } from "@/shared/components/logo/logo";
                             <span class="text-muted-color font-medium">Sign in to continue</span>
                         </div>
                         <div>
-                            <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Usuario</label>
-                            <input pInputText id="email1" type="text" placeholder="Email address" class="w-full md:w-120 mb-8" [(ngModel)]="email" />
+                            <label for="username" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Usuario</label>
+                            <input pInputText id="username" type="text" placeholder="Email address" class="w-full md:w-120 mb-8" [(ngModel)]="username" />
 
                             <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
                             <p-password id="password1" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
@@ -36,7 +38,7 @@ import { Logo } from "@/shared/components/logo/logo";
   
                                 </div>
                             </div>
-                            <p-button label="Sign In" styleClass="w-full" routerLink="/"></p-button>
+                            <p-button label="Sign In" styleClass="w-full" routerLink="/" (click)="handleLogin()"></p-button>
                         </div>
                     </div>
                 </div>
@@ -45,7 +47,26 @@ import { Logo } from "@/shared/components/logo/logo";
     `
 })
 export class Login {
-    email: string = '';
+    constructor(private loginService: LoginService) {
+
+    }
+
+    handleLogin() {
+        let credentials: UserCredentials = {
+            username: this.username,
+            password: this.password
+        }
+        this.loginService.login(credentials).subscribe({
+            next: (user) => {
+                console.log('Login successful:', user);
+            },
+            error: (error) => {
+                console.error('Login failed:', error);
+            }
+        });
+
+    }
+    username: string = '';
 
     password: string = '';
 

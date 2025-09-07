@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
 import { AppConfigurator } from './app.configurator';
 import { LayoutService } from '../service/layout.service';
-import { Logo } from "@/shared/components/logo/logo";
+import { Logo } from "@/libs/components/logo/logo";
 
 @Component({
     selector: 'app-topbar',
@@ -18,7 +18,7 @@ import { Logo } from "@/shared/components/logo/logo";
             </button>
             <a class="layout-topbar-logo" routerLink="/">
                 <app-logo></app-logo>
-                <span>SAKAI</span>
+                <span>CAFECITO</span>
             </a>
         </div>
 
@@ -50,16 +50,8 @@ import { Logo } from "@/shared/components/logo/logo";
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
                     <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-calendar"></i>
-                        <span>Calendar</span>
-                    </button>
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-inbox"></i>
-                        <span>Messages</span>
-                    </button>
-                    <button type="button" class="layout-topbar-action">
                         <i class="pi pi-user"></i>
-                        <span>Profile</span>
+                        <span>Usuario</span>
                     </button>
                 </div>
             </div>
