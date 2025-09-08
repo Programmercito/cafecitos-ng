@@ -1,4 +1,4 @@
-import { Users } from "../models/Users";
+import { Users } from "../models/users";
 
 export class Common{
     getCurrectUser():Users{
