@@ -1,4 +1,4 @@
- <p-toolbar>
+  <p-toolbar>
     <ng-template #start>
         <p-button label="New" icon="pi pi-plus" severity="secondary"
             class="mr-2" (onClick)="openNew()" />
@@ -7,15 +7,18 @@
 </p-toolbar>
 <p-table
     #dt
-    [value]="this.lista"
-    [rows]="this.perPage"
+    [value]="lista"
+    [rows]="perPage"
     [paginator]="true"
+    [lazy]="true"
     [tableStyle]="{ 'min-width': '75rem' }"
     [rowHover]="true"
+    (onPage)="onPageChange($event)"
+    [totalRecords]="total"
     dataKey="id"
+    [(first)]="first"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-    [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[10, 20, 30]">
+    [showCurrentPageReport]="true">
     <ng-template #caption>
         <div class="flex items-center justify-between">
             <h5 class="m-0">Manage Products</h5>
@@ -79,3 +82,4 @@
         </tr>
     </ng-template>
 </p-table>
+
