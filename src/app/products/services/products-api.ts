@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Products } from '../../libs/models/Products-model';
+import { ProductsModel } from '../../libs/models/products-model';
 import { PaginatedResponse } from '../../libs/models/paginated-response.model';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class ProductsApiService {
     name?: string,
     page: number = 1,
     perPage: number = 15
-  ): Observable<PaginatedResponse<Products>> {
+  ): Observable<PaginatedResponse<ProductsModel>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('perPage', perPage.toString());
@@ -31,6 +31,6 @@ export class ProductsApiService {
       params = params.set('name', name);
     }
 
-    return this.http.get<PaginatedResponse<Products>>(this.apiUrl, { params });
+    return this.http.get<PaginatedResponse<ProductsModel>>(this.apiUrl, { params });
   }
 }
