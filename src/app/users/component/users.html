@@ -1,0 +1,103 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<p-toolbar>
+    <ng-template #start>
+        <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
+    </ng-template>
+
+    <ng-template #end>
+        <label for="active" class="mr-2">Status </label>
+        <p-select id="state" [(ngModel)]="active" [options]="dropdownItems" optionLabel="name" [optionValue]="'code'"
+            (onChange)="onChangeActive($event.value)" placeholder="Select One" class="w-full"></p-select>
+    </ng-template>
+</p-toolbar>
+
+<p-table #dt [value]="lista" [rows]="perPage" [paginator]="true" [lazy]="true" [tableStyle]="{ 'min-width': '75rem' }"
+    [rowHover]="true" (onPage)="onPageChange($event)" [totalRecords]="total" dataKey="id" [(first)]="first"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users" [showCurrentPageReport]="true">
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Manage Users</h5>
+            <p-iconfield>
+                <p-inputicon class="pi pi-search" />
+                <input pInputText type="text" #search placeholder="Search..." (keydown.enter)="filterByName(search.value)" />
+            </p-iconfield>
+        </div>
+    </ng-template>
+    <ng-template #header>
+        <tr>
+            <th style="min-width: 3rem">Id</th>
+            <th style="min-width:16rem">Username</th>
+            <th style="min-width:10rem">First Name</th>
+            <th style="min-width:10rem">Last Name</th>
+            <th style="min-width:10rem">Type</th>
+            <th style="min-width: 3rem">Active</th>
+            <th style="min-width: 10rem"></th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-user>
+        <tr>
+            <td>{{user.id}}</td>
+            <td>{{user.username}}</td>
+            <td>{{user.first_name}}</td>
+            <td>{{user.last_name}}</td>
+            <td>{{user.type}}</td>
+            <td>
+                <p-tag [value]="user.is_active ? 'ACTIVE' : 'INACTIVE'" 
+                       [severity]="user.is_active ? 'success' : 'danger'"></p-tag>
+            </td>
+            <td>
+                <p-button icon="pi pi-pencil" severity="info" class="mr-2" (click)="editUser(user)"></p-button>
+                <p-button [icon]="user.is_active ? 'pi pi-eye-slash' : 'pi pi-eye'" 
+                          [severity]="user.is_active ? 'danger' : 'success'" 
+                          (click)="changeStatus(user)"></p-button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-dialog [(visible)]="userDialog" [style]="{width: '450px'}" header="User Details" [modal]="true" class="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="username">Username</label>
+            <input type="text" pInputText id="username" [(ngModel)]="user.username" required autofocus />
+            <small class="p-error" *ngIf="submitted && !user.username">Username is required.</small>
+        </div>
+
+        <div class="field" *ngIf="!user.id">
+            <label for="password">Password</label>
+            <input type="password" pInputText id="password" [(ngModel)]="user.password" required />
+            <small class="p-error" *ngIf="submitted && !user.password">Password is required.</small>
+        </div>
+
+        <div class="formgrid grid">
+            <div class="field col">
+                <label for="first_name">First Name</label>
+                <input type="text" pInputText id="first_name" [(ngModel)]="user.first_name" required />
+                <small class="p-error" *ngIf="submitted && !user.first_name">First Name is required.</small>
+            </div>
+            <div class="field col">
+                <label for="last_name">Last Name</label>
+                <input type="text" pInputText id="last_name" [(ngModel)]="user.last_name" required />
+                <small class="p-error" *ngIf="submitted && !user.last_name">Last Name is required.</small>
+            </div>
+        </div>
+
+        <div class="formgrid grid">
+            <div class="field col">
+                <label for="type">Type</label>
+                <p-select id="type" [options]="userTypes" [(ngModel)]="user.type" optionLabel="name" optionValue="value" placeholder="Select a Type" fluid></p-select>
+            </div>
+            <div class="field col">
+                <label for="status">Status</label>
+                <p-select id="status" [options]="statusOptions" [(ngModel)]="user.is_active" optionLabel="name" optionValue="value" placeholder="Select a Status" fluid></p-select>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <p-button label="Cancel" icon="pi pi-times" severity="secondary" (click)="hideDialog()"></p-button>
+        <p-button label="Save" icon="pi pi-check" (click)="saveUser()"></p-button>
+    </ng-template>
+</p-dialog>

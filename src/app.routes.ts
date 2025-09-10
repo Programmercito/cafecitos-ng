@@ -5,6 +5,7 @@ import { Documentation } from './app/pages/documentation/documentation';
 import { Landing } from './app/pages/landing/landing';
 import { Notfound } from './app/pages/notfound/notfound';
 import { Products } from '@/products/component/products';
+import { Users } from './app/users/component/users';
 
 
 export const appRoutes: Routes = [
@@ -16,7 +17,8 @@ export const appRoutes: Routes = [
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') },
-            { path: 'products', component: Products }
+            { path: 'products', component: Products },
+            { path: 'users', component: Users }
         ]
     },
     { path: 'notfound', component: Notfound },
