@@ -1,16 +1,22 @@
-import { Component } from '@angular/core';
-import { MenuItem } from 'primeng/api';
-import { RouterModule } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MenuItem, ConfirmationService, MessageService } from 'primeng/api';
+import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
 import { AppConfigurator } from './app.configurator';
 import { LayoutService } from '../service/layout.service';
 import { Logo } from "@/libs/components/logo/logo";
+import { MenuModule } from 'primeng/menu';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
+import { UsersApiService } from 'src/app/users/services/users-api';
+import { Menu } from 'primeng/menu';
 
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator, Logo],
+    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator, Logo, MenuModule, ConfirmDialogModule, ToastModule],
+    providers: [MessageService, ConfirmationService, UsersApiService],
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
             <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()">
@@ -49,21 +55,61 @@ import { Logo } from "@/libs/components/logo/logo";
 
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
-                    <button type="button" class="layout-topbar-action">
+                    <button type="button" class="layout-topbar-action" (click)="toggleMenu($event)">
                         <i class="pi pi-user"></i>
                         <span>Usuario</span>
                     </button>
+                    <p-menu #menu [model]="menuItems" [popup]="true"></p-menu>
                 </div>
             </div>
         </div>
+        <p-toast></p-toast>
+        <p-confirmDialog></p-confirmDialog>
     </div>`
 })
-export class AppTopbar {
+export class AppTopbar implements OnInit {
     items!: MenuItem[];
+    menuItems: MenuItem[] = [];
 
-    constructor(public layoutService: LayoutService) { }
+    @ViewChild('menu') menu: Menu | undefined;
+
+    constructor(public layoutService: LayoutService,
+                private usersService: UsersApiService,
+                private messageService: MessageService,
+                private confirmationService: ConfirmationService,
+                private router: Router) { }
+
+    ngOnInit(): void {
+        this.menuItems = [
+            { label: 'Change Password', icon: 'pi pi-fw pi-key' },
+            { label: 'Logout', icon: 'pi pi-fw pi-sign-out', command: () => this.logout() }
+        ];
+    }
 
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
+    }
+
+    toggleMenu(event: Event) {
+        this.menu?.toggle(event);
+    }
+
+    logout() {
+        this.confirmationService.confirm({
+            message: 'Are you sure you want to log out?',
+            header: 'Confirm Logout',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.usersService.logout().subscribe({
+                    next: () => {
+                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Logged out successfully' });
+                        this.router.navigate(['/login']); // Assuming a login route
+                    },
+                    error: (err) => {
+                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Logout failed' });
+                    }
+                });
+            }
+        });
     }
 }

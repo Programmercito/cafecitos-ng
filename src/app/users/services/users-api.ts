@@ -38,7 +38,7 @@ export class UsersApiService { // Renamed from UsersApi to UsersApiService for c
     return this.http.get<UserModel>(`${this.apiUrl}/${id}`);
   }
 
-  createUser(user: Omit<UserModel, 'id' | 'is_active'>): Observable<UserModel> { // Assuming is_active is set by backend on creation
+  createUser(user: Omit<UserModel, 'id' | 'is_active'>): Observable<UserModel> {
     return this.http.post<UserModel>(this.apiUrl, user);
   }
 
@@ -53,5 +53,9 @@ export class UsersApiService { // Renamed from UsersApi to UsersApiService for c
 
   getUsersType(): Observable<{name: string, value: string}[]> {
     return this.http.get<{name: string, value: string}[]>(`${this.apiUrl}/types`);
+  }
+
+  logout(): Observable<void> {
+    return this.http.delete<void>('/api/auth/logout');
   }
 }
