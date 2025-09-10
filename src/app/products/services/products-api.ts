@@ -24,7 +24,7 @@ export class ProductsApiService {
       .set('perPage', perPage.toString());
 
     if (active !== undefined) {
-      params = params.set('active', active.toString());
+      params = params.set('active', active ? 1 : 0);
     }
 
     if (name) {

@@ -1,9 +1,17 @@
-  <p-toolbar>
+ <p-toolbar>
     <ng-template #start>
         <p-button label="New" icon="pi pi-plus" severity="secondary"
             class="mr-2" (onClick)="openNew()" />
     </ng-template>
 
+    <ng-template #end>
+        <label for="active" class="mr-2">Status </label>
+        <p-select id="state" [(ngModel)]="active"
+            [options]="dropdownItems" optionLabel="name" [optionValue]="'code'"
+            (onChange)="onChangeActive($event.value)"
+            placeholder="Select One" class="w-full"></p-select>
+
+    </ng-template>
 </p-toolbar>
 <p-table
     #dt
@@ -19,13 +27,15 @@
     [(first)]="first"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
     [showCurrentPageReport]="true">
-    <ng-template #caption>
-        <div class="flex items-center justify-between">
-            <h5 class="m-0">Manage Products</h5>
-            <p-iconfield>
-            </p-iconfield>
-        </div>
-    </ng-template>
+            <ng-template #caption>
+                <div class="flex items-center justify-between">
+                    <h5 class="m-0">Manage Products</h5>
+                    <p-iconfield>
+                        <p-inputicon class="pi pi-search" />
+                        <input pInputText type="text" #search placeholder="Buscar..." (keydown.enter)="filterByName(search.value)" />
+                    </p-iconfield>
+                </div>
+            </ng-template>
     <ng-template #header>
         <tr>
             <th style="min-width: 3rem">
@@ -82,4 +92,3 @@
         </tr>
     </ng-template>
 </p-table>
-
