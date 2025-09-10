@@ -21,15 +21,17 @@ import { TagModule } from 'primeng/tag';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { Tooltip } from "primeng/tooltip";
 
 @Component({
   selector: 'app-products',
   imports: [
     CommonModule,
-    ToolbarModule, ButtonModule, TableModule, IconFieldModule, InputIconModule, 
+    ToolbarModule, ButtonModule, TableModule, IconFieldModule, InputIconModule,
     SelectModule, FormsModule, InputTextModule, DialogModule, InputNumberModule,
-    FileUploadModule, ToastModule, ConfirmDialogModule, CurrencyPipe, TagModule
-  ],
+    FileUploadModule, ToastModule, ConfirmDialogModule, CurrencyPipe, TagModule,
+    Tooltip
+],
   providers: [MessageService, ConfirmationService],
   templateUrl: './products.html',
   styleUrl: './products.scss'
