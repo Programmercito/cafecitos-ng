@@ -39,7 +39,8 @@ export class ProductsApiService {
   }
 
   updateProduct(id: number, product: ProductsModel): Observable<ProductsModel> {
-    return this.http.put<ProductsModel>(`${this.apiUrl}/${id}`, product);
+    const { id: productId, ...productData } = product;
+    return this.http.put<ProductsModel>(`${this.apiUrl}/${id}`, productData);
   }
 
   changeStatus(id: number, active: boolean): Observable<void> {
