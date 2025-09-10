@@ -19,6 +19,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { TagModule } from 'primeng/tag';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-products',
@@ -38,6 +40,7 @@ export class Products implements OnInit {
   product!: ProductsModel;
   uploadedFile: any;
   newImagePreviewUrl: SafeUrl | null = null;
+  private imageCacheBuster = new Map<number, number>();
 
   lista: ProductsModel[] = [];
   active: boolean = true;
@@ -74,7 +77,9 @@ export class Products implements OnInit {
   }
 
   createImageUrl(id: number): SafeUrl {
-    return this.sanitizer.bypassSecurityTrustUrl(`/api/products/${id}/image`);
+    const cacheBuster = this.imageCacheBuster.get(id) || '';
+    const imageUrl = `/api/products/${id}/image?_=${cacheBuster}`;
+    return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
   }
 
   getProducts() {
@@ -133,35 +138,30 @@ export class Products implements OnInit {
     this.submitted = true;
 
     if (this.product.description?.trim()) {
-      if (this.product.id) {
-        this.productService.updateProduct(this.product.id, this.product).subscribe({
-          next: (response) => {
-            if (this.uploadedFile) {
-              this.uploadImage(response.id);
-            }
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated' });
+      const productAction = this.product.id
+        ? this.productService.updateProduct(this.product.id, this.product)
+        : this.productService.createProduct(this.product as Omit<ProductsModel, 'id'>);
+
+      productAction.subscribe({
+        next: (response) => {
+          const successMessage = this.product.id ? 'Product Updated' : 'Product Created';
+          this.messageService.add({ severity: 'success', summary: 'Successful', detail: successMessage });
+
+          if (this.uploadedFile) {
+            this.uploadImage(response.id).subscribe(() => {
+              this.getProducts();
+              this.hideDialog();
+            });
+          } else {
             this.getProducts();
             this.hideDialog();
-          },
-          error: (err) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error updating product' });
           }
-        });
-      } else {
-        this.productService.createProduct(this.product).subscribe({
-          next: (response) => {
-            if (this.uploadedFile) {
-              this.uploadImage(response.id);
-            }
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created' });
-            this.getProducts();
-            this.hideDialog();
-          },
-          error: (err) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error creating product' });
-          }
-        });
-      }
+        },
+        error: (err) => {
+          const errorMessage = this.product.id ? 'Error updating product' : 'Error creating product';
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: errorMessage });
+        }
+      });
     }
   }
 
@@ -191,15 +191,17 @@ export class Products implements OnInit {
     );
   }
 
-  uploadImage(productId: number) {
-    this.productService.uploadImage(productId, this.uploadedFile).subscribe({
-      next: () => {
+  uploadImage(productId: number): Observable<any> {
+    return this.productService.uploadImage(productId, this.uploadedFile).pipe(
+      tap(() => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Image uploaded' });
         this.uploadedFile = null;
-      },
-      error: (err) => {
+        this.imageCacheBuster.set(productId, new Date().getTime());
+      }),
+      catchError((err) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Image upload failed' });
-      }
-    });
+        return throwError(() => err);
+      })
+    );
   }
 }
