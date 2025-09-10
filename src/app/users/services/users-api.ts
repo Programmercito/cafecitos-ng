@@ -58,4 +58,8 @@ export class UsersApiService { // Renamed from UsersApi to UsersApiService for c
   logout(): Observable<void> {
     return this.http.delete<void>('/api/auth/logout');
   }
+
+  changePassword(current_password: string, new_password: string): Observable<void> {
+    return this.http.post<void>('/api/auth/change-password', { current_password, new_password, new_password_confirmation: new_password });
+  }
 }

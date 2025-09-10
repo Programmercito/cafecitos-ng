@@ -6,6 +6,7 @@ import { Landing } from './app/pages/landing/landing';
 import { Notfound } from './app/pages/notfound/notfound';
 import { Products } from '@/products/component/products';
 import { Users } from './app/users/component/users';
+import { ChangePassword } from './app/change-password/component/change-password';
 
 
 export const appRoutes: Routes = [
@@ -18,7 +19,8 @@ export const appRoutes: Routes = [
             { path: 'documentation', component: Documentation },
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') },
             { path: 'products', component: Products },
-            { path: 'users', component: Users }
+            { path: 'users', component: Users },
+            { path: 'change-password', component: ChangePassword }
         ]
     },
     { path: 'notfound', component: Notfound },

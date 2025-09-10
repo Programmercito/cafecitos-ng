@@ -81,7 +81,7 @@ export class AppTopbar implements OnInit {
 
     ngOnInit(): void {
         this.menuItems = [
-            { label: 'Change Password', icon: 'pi pi-fw pi-key' },
+            { label: 'Change Password', icon: 'pi pi-fw pi-key', routerLink: '/change-password' },
             { label: 'Logout', icon: 'pi pi-fw pi-sign-out', command: () => this.logout() }
         ];
     }
