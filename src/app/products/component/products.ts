@@ -16,12 +16,13 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { CurrencyPipe } from '@angular/common';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-products',
   imports: [
+    CommonModule,
     ToolbarModule, ButtonModule, TableModule, IconFieldModule, InputIconModule, 
     SelectModule, FormsModule, InputTextModule, DialogModule, InputNumberModule,
     FileUploadModule, ToastModule, ConfirmDialogModule, CurrencyPipe, TagModule

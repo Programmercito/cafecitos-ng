@@ -43,8 +43,8 @@ export class ProductsApiService {
     return this.http.put<ProductsModel>(`${this.apiUrl}/${id}`, productData);
   }
 
-  changeStatus(id: number, active: boolean): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/${id}/status`, { active });
+  changeStatus(id: number, is_active: boolean): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/${id}/status`, { is_active });
   }
 
   uploadImage(id: number, image: File): Observable<void> {
