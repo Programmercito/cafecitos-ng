@@ -74,10 +74,10 @@ export class AppTopbar implements OnInit {
     @ViewChild('menu') menu: Menu | undefined;
 
     constructor(public layoutService: LayoutService,
-                private usersService: UsersApiService,
-                private messageService: MessageService,
-                private confirmationService: ConfirmationService,
-                private router: Router) { }
+        private usersService: UsersApiService,
+        private messageService: MessageService,
+        private confirmationService: ConfirmationService,
+        private router: Router) { }
 
     ngOnInit(): void {
         this.menuItems = [
@@ -95,6 +95,7 @@ export class AppTopbar implements OnInit {
     }
 
     logout() {
+        sessionStorage.removeItem('user');
         this.confirmationService.confirm({
             message: 'Are you sure you want to log out?',
             header: 'Confirm Logout',
@@ -103,7 +104,8 @@ export class AppTopbar implements OnInit {
                 this.usersService.logout().subscribe({
                     next: () => {
                         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Logged out successfully' });
-                        this.router.navigate(['/login']); // Assuming a login route
+
+
                     },
                     error: (err) => {
                         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Logout failed' });
@@ -111,5 +113,6 @@ export class AppTopbar implements OnInit {
                 });
             }
         });
+        this.router.navigate(['/auth/login']);
     }
 }
