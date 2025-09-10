@@ -57,47 +57,76 @@
     </ng-template>
 </p-table>
 
-<p-dialog [(visible)]="userDialog" [style]="{width: '450px'}" header="User Details" [modal]="true" class="p-fluid">
+<p-dialog [(visible)]="userDialog" [style]="{ width: '450px' }"
+    header="User Details" [modal]="true">
     <ng-template pTemplate="content">
-        <div class="field">
-            <label for="username">Username</label>
-            <input type="text" pInputText id="username" [(ngModel)]="user.username" required autofocus />
-            <small class="p-error" *ngIf="submitted && !user.username">Username is required.</small>
+        <div>
+            <label for="type" class="block font-bold mb-3">Type</label>
+            <p-select id="type" [options]="userTypes"
+                [(ngModel)]="user.type" optionLabel="name"
+                optionValue="value" placeholder="Select a Type"
+                fluid></p-select>
+        </div>
+        <div>
+            <label for="status" class="block font-bold mb-3">Status</label>
+            <p-select id="status" [options]="statusOptions"
+                [(ngModel)]="user.is_active" optionLabel="name"
+                optionValue="value" placeholder="Select a Status"
+                fluid></p-select>
+        </div>
+        <div>
+            <label for="username"
+                class="block font-bold mb-3">Username</label>
+            <input type="text" pInputText id="username"
+                [(ngModel)]="user.username" required autofocus
+                fluid />
+            @if (submitted && !user.username) {
+            <small class="p-error">Username is
+                required.</small>
+            }
         </div>
 
-        <div class="field" *ngIf="!user.id">
-            <label for="password">Password</label>
-            <input type="password" pInputText id="password" [(ngModel)]="user.password" required />
-            <small class="p-error" *ngIf="submitted && !user.password">Password is required.</small>
+        <div>
+            <label for="password"
+                class="block font-bold mb-3">Password</label>
+            <input type="password" pInputText id="password"
+                [(ngModel)]="user.password" [required]="!user.id"
+                fluid />
+            @if (submitted && !user.password && !user.id) {
+            <small class="p-error">Password is
+                required.</small>
+            }
         </div>
 
-        <div class="formgrid grid">
-            <div class="field col">
-                <label for="first_name">First Name</label>
-                <input type="text" pInputText id="first_name" [(ngModel)]="user.first_name" required />
-                <small class="p-error" *ngIf="submitted && !user.first_name">First Name is required.</small>
-            </div>
-            <div class="field col">
-                <label for="last_name">Last Name</label>
-                <input type="text" pInputText id="last_name" [(ngModel)]="user.last_name" required />
-                <small class="p-error" *ngIf="submitted && !user.last_name">Last Name is required.</small>
-            </div>
+        <div>
+            <label for="first_name" class="block font-bold mb-3">First
+                Name</label>
+            <input type="text" pInputText id="first_name"
+                [(ngModel)]="user.first_name" required
+                fluid />
+            @if (submitted && !user.first_name) {
+            <small class="p-error">First Name is
+                required.</small>
+            }
+        </div>
+        <div>
+            <label for="last_name" class="block font-bold mb-3">Last
+                Name</label>
+            <input type="text" pInputText id="last_name"
+                [(ngModel)]="user.last_name" required
+                fluid />
+            @if (submitted && !user.last_name) {
+            <small class="p-error">Last Name is
+                required.</small>
+            }
         </div>
 
-        <div class="formgrid grid">
-            <div class="field col">
-                <label for="type">Type</label>
-                <p-select id="type" [options]="userTypes" [(ngModel)]="user.type" optionLabel="name" optionValue="value" placeholder="Select a Type" fluid></p-select>
-            </div>
-            <div class="field col">
-                <label for="status">Status</label>
-                <p-select id="status" [options]="statusOptions" [(ngModel)]="user.is_active" optionLabel="name" optionValue="value" placeholder="Select a Status" fluid></p-select>
-            </div>
-        </div>
     </ng-template>
 
     <ng-template pTemplate="footer">
-        <p-button label="Cancel" icon="pi pi-times" severity="secondary" (click)="hideDialog()"></p-button>
-        <p-button label="Save" icon="pi pi-check" (click)="saveUser()"></p-button>
+        <p-button label="Cancel" icon="pi pi-times" severity="secondary"
+            (click)="hideDialog()"></p-button>
+        <p-button label="Save" icon="pi pi-check"
+            (click)="saveUser()"></p-button>
     </ng-template>
 </p-dialog>

@@ -28,7 +28,7 @@ export class UsersApiService { // Renamed from UsersApi to UsersApiService for c
     }
 
     if (name) {
-      params = params.set('name', name);
+      params = params.set('username', name);
     }
 
     return this.http.get<PaginatedResponse<UserModel>>(this.apiUrl, { params });
