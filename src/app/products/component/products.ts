@@ -18,6 +18,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { TagModule } from 'primeng/tag';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-products',
@@ -36,6 +37,7 @@ export class Products implements OnInit {
   submitted: boolean = false;
   product!: ProductsModel;
   uploadedFile: any;
+  newImagePreviewUrl: SafeUrl | null = null;
 
   lista: ProductsModel[] = [];
   active: boolean = true;
@@ -56,7 +58,8 @@ export class Products implements OnInit {
   constructor(
     private productService: ProductsApiService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -68,6 +71,10 @@ export class Products implements OnInit {
     this.productService.getProductTypes().subscribe(types => {
       this.productTypes = types;
     });
+  }
+
+  createImageUrl(id: number): SafeUrl {
+    return this.sanitizer.bypassSecurityTrustUrl(`/api/products/${id}/image`);
   }
 
   getProducts() {
@@ -119,6 +126,7 @@ export class Products implements OnInit {
   hideDialog() {
     this.productDialog = false;
     this.submitted = false;
+    this.newImagePreviewUrl = null;
   }
 
   saveProduct() {
@@ -178,6 +186,9 @@ export class Products implements OnInit {
 
   onUpload(event: any) {
     this.uploadedFile = event.files[0];
+    this.newImagePreviewUrl = this.sanitizer.bypassSecurityTrustUrl(
+      URL.createObjectURL(this.uploadedFile)
+    );
   }
 
   uploadImage(productId: number) {

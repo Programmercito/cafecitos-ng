@@ -44,7 +44,7 @@
             <td>{{product.id}}</td>
             <td>{{product.description}}</td>
             <td>
-                <img [src]="'/api/products/' + product.id + '/image'" [alt]="product.description" width="100" class="shadow-4" />
+                <img [src]="createImageUrl(product.id)" [alt]="product.description" class="product-image-thumbnail" onerror="this.style.display='none'" />
             </td>
             <td>{{product.type}}</td>
             <td>{{product.client_price | currency:'USD'}}</td>
@@ -105,12 +105,17 @@
 
         <div class="field" *ngIf="product.id">
             <label>Current Image</label>
-            <img [src]="'/api/products/' + product.id + '/image'" [alt]="product.description" width="150" class="mt-2 shadow-4" />
+            <img [src]="createImageUrl(product.id)" [alt]="product.description" class="product-image-preview" onerror="this.style.display='none'" />
         </div>
 
         <div class="field">
             <label for="image">{{product.id ? 'Change' : ''}} Image</label>
             <p-fileUpload mode="basic" name="image" url="./" (onSelect)="onUpload($event)" accept="image/*" [maxFileSize]="5000000"></p-fileUpload>
+        </div>
+
+        <div class="field" *ngIf="newImagePreviewUrl">
+            <label>New Image Preview</label>
+            <img [src]="newImagePreviewUrl" [alt]="product.description" class="product-image-preview" />
         </div>
     </ng-template>
 
