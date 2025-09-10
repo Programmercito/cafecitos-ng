@@ -28,7 +28,7 @@
             <p-iconfield>
                 <p-inputicon class="pi pi-search" />
                 <input pInputText type="text" #search placeholder="Buscar..."
-                    (keydown.enter)="filterByName(search.value)" />
+                    (keydown.enter)="filterByName(search.value)" (blur)="filterByName(search.value)" />
             </p-iconfield>
         </div>
     </ng-template>

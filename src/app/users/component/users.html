@@ -21,7 +21,7 @@
             <h5 class="m-0">Manage Users</h5>
             <p-iconfield>
                 <p-inputicon class="pi pi-search" />
-                <input pInputText type="text" #search placeholder="Search..." (keydown.enter)="filterByName(search.value)" />
+                <input pInputText type="text" #search placeholder="Buscar..." (keydown.enter)="filterByName(search.value)" (blur)="filterByName(search.value)" />
             </p-iconfield>
         </div>
     </ng-template>
