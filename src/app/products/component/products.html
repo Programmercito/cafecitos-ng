@@ -101,7 +101,7 @@
 
         <div class="field">
             <label for="image">Image</label>
-            <p-fileUpload mode="basic" name="image" url="./" (onSelect)="onUpload($event)" accept="image/*" maxFileSize="1000000"></p-fileUpload>
+            <p-fileUpload mode="basic" name="image" url="./" (onSelect)="onUpload($event)" accept="image/*" [maxFileSize]="5000000"></p-fileUpload>
         </div>
     </ng-template>
 
