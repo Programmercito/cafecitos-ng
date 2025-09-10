@@ -1,94 +1,112 @@
- <p-toolbar>
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<p-toolbar>
     <ng-template #start>
-        <p-button label="New" icon="pi pi-plus" severity="secondary"
-            class="mr-2" (onClick)="openNew()" />
+        <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
     </ng-template>
 
     <ng-template #end>
         <label for="active" class="mr-2">Status </label>
-        <p-select id="state" [(ngModel)]="active"
-            [options]="dropdownItems" optionLabel="name" [optionValue]="'code'"
-            (onChange)="onChangeActive($event.value)"
-            placeholder="Select One" class="w-full"></p-select>
-
+        <p-select id="state" [(ngModel)]="active" [options]="dropdownItems" optionLabel="name" [optionValue]="'code'"
+            (onChange)="onChangeActive($event.value)" placeholder="Select One" class="w-full"></p-select>
     </ng-template>
 </p-toolbar>
-<p-table
-    #dt
-    [value]="lista"
-    [rows]="perPage"
-    [paginator]="true"
-    [lazy]="true"
-    [tableStyle]="{ 'min-width': '75rem' }"
-    [rowHover]="true"
-    (onPage)="onPageChange($event)"
-    [totalRecords]="total"
-    dataKey="id"
-    [(first)]="first"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-    [showCurrentPageReport]="true">
-            <ng-template #caption>
-                <div class="flex items-center justify-between">
-                    <h5 class="m-0">Manage Products</h5>
-                    <p-iconfield>
-                        <p-inputicon class="pi pi-search" />
-                        <input pInputText type="text" #search placeholder="Buscar..." (keydown.enter)="filterByName(search.value)" />
-                    </p-iconfield>
-                </div>
-            </ng-template>
+
+<p-table #dt [value]="lista" [rows]="perPage" [paginator]="true" [lazy]="true" [tableStyle]="{ 'min-width': '75rem' }"
+    [rowHover]="true" (onPage)="onPageChange($event)" [totalRecords]="total" dataKey="id" [(first)]="first"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products" [showCurrentPageReport]="true">
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Manage Products</h5>
+            <p-iconfield>
+                <p-inputicon class="pi pi-search" />
+                <input pInputText type="text" #search placeholder="Buscar..." (keydown.enter)="filterByName(search.value)" />
+            </p-iconfield>
+        </div>
+    </ng-template>
     <ng-template #header>
         <tr>
-            <th style="min-width: 3rem">
-                Id
-            </th>
-            <th style="min-width:16rem">
-                Name
-            </th>
-            <th style="min-width:5rem">
-                Client Price
-            </th>
-            <th style="min-width:5rem">
-                Animation Price
-            </th>
-            <th style="min-width:5rem">
-                Waiter Price
-            </th>
-            <th style="min-width:5rem">
-                Waiter Commission
-            </th>
-            <th style="min-width: 3rem">
-                Active
-            </th>
+            <th style="min-width: 3rem">Id</th>
+            <th style="min-width:16rem">Name</th>
+            <th style="min-width:10rem">Type</th>
+            <th style="min-width:5rem">Client Price</th>
+            <th style="min-width:5rem">Animation Price</th>
+            <th style="min-width:5rem">Waiter Price</th>
+            <th style="min-width:5rem">Waiter Commission</th>
+            <th style="min-width: 3rem">Active</th>
             <th style="min-width: 10rem"></th>
         </tr>
     </ng-template>
     <ng-template #body let-product>
         <tr>
+            <td>{{product.id}}</td>
+            <td>{{product.description}}</td>
+            <td>{{product.type}}</td>
+            <td>{{product.client_price | currency:'USD'}}</td>
+            <td>{{product.animation_price | currency:'USD'}}</td>
+            <td>{{product.waiter_price | currency:'USD'}}</td>
+            <td>{{product.waiter_commission | currency:'USD'}}</td>
             <td>
-                {{product.id}}
+                <p-tag [value]="product.is_active ? 'ACTIVE' : 'INACTIVE'" 
+                       [severity]="product.is_active ? 'success' : 'danger'"></p-tag>
             </td>
             <td>
-                {{product.description}}
+                <p-button icon="pi pi-pencil" severity="info" class="mr-2" (click)="editProduct(product)"></p-button>
+                <p-button [icon]="product.is_active ? 'pi pi-eye-slash' : 'pi pi-eye'" 
+                          [severity]="product.is_active ? 'danger' : 'success'" 
+                          (click)="changeStatus(product)"></p-button>
             </td>
-            <td>
-                {{product.client_price}}
-            </td>
-            <td>
-                {{product.animation_price}}
-            </td>
-
-            <td>
-                {{product.waiter_price}}
-            </td>
-            <td>
-                {{product.waiter_commission}}
-            </td>
-
-            <td>
-                {{product.is_active}}
-            </td>
-
-            <td></td>
         </tr>
     </ng-template>
 </p-table>
+
+<p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true" class="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="description">Name</label>
+            <input type="text" pInputText id="description" [(ngModel)]="product.description" required autofocus />
+            <small class="p-error" *ngIf="submitted && !product.description">Name is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="type">Type</label>
+            <p-select id="type" [options]="productTypes" [(ngModel)]="product.type" optionLabel="name" optionValue="value" placeholder="Select a Type"></p-select>
+        </div>
+
+        <div class="field">
+            <label for="status">Status</label>
+            <p-select id="status" [options]="statusOptions" [(ngModel)]="product.is_active" optionLabel="name" optionValue="value" placeholder="Select a Status"></p-select>
+        </div>
+
+        <div class="field">
+            <label for="client_price">Client Price</label>
+            <p-inputNumber id="client_price" [(ngModel)]="product.client_price" mode="currency" currency="USD" locale="en-US"></p-inputNumber>
+        </div>
+
+        <div class="field">
+            <label for="animation_price">Animation Price</label>
+            <p-inputNumber id="animation_price" [(ngModel)]="product.animation_price" mode="currency" currency="USD" locale="en-US"></p-inputNumber>
+        </div>
+
+        <div class="field">
+            <label for="waiter_price">Waiter Price</label>
+            <p-inputNumber id="waiter_price" [(ngModel)]="product.waiter_price" mode="currency" currency="USD" locale="en-US"></p-inputNumber>
+        </div>
+
+        <div class="field">
+            <label for="waiter_commission">Waiter Commission</label>
+            <p-inputNumber id="waiter_commission" [(ngModel)]="product.waiter_commission" mode="currency" currency="USD" locale="en-US"></p-inputNumber>
+        </div>
+
+        <div class="field">
+            <label for="image">Image</label>
+            <p-fileUpload mode="basic" name="image" url="./" (onSelect)="onUpload($event)" accept="image/*" maxFileSize="1000000"></p-fileUpload>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <p-button label="Cancel" icon="pi pi-times" severity="secondary" (click)="hideDialog()"></p-button>
+        <p-button label="Save" icon="pi pi-check" (click)="saveProduct()"></p-button>
+    </ng-template>
+</p-dialog>
