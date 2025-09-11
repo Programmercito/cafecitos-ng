@@ -7,6 +7,7 @@ import { Notfound } from './app/pages/notfound/notfound';
 import { Products } from '@/products/component/products';
 import { Users } from './app/users/component/users';
 import { ChangePassword } from './app/change-password/component/change-password';
+import { Orders } from './app/orders/component/orders';
 
 
 export const appRoutes: Routes = [
@@ -20,6 +21,7 @@ export const appRoutes: Routes = [
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') },
             { path: 'products', component: Products },
             { path: 'users', component: Users },
+            { path: 'orders', component: Orders },
             { path: 'change-password', component: ChangePassword }
         ]
     },

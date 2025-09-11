@@ -1,0 +1,61 @@
+<p-toast></p-toast>
+<p-confirmdialog></p-confirmdialog>
+
+<p-toolbar>
+    <ng-template #start>
+        <p-button label="New" icon="pi pi-plus" severity="secondary"
+            class="mr-2" (onClick)="openNew()" />
+    </ng-template>
+
+    <ng-template #end>
+        <div class="flex gap-2">
+            <p-datepicker [(ngModel)]="date_from" (onSelect)="getOrders()"
+                dateFormat="yy-mm-dd" placeholder="Date From"></p-datepicker>
+            <p-datepicker [(ngModel)]="date_to" (onSelect)="getOrders()"
+                dateFormat="yy-mm-dd" placeholder="Date To"></p-datepicker>
+            <p-select id="type" [(ngModel)]="type" [options]="orderTypes"
+                optionLabel="name" optionValue="value"
+                (onChange)="getOrders()" placeholder="Select Type"
+                class="w-full"></p-select>
+            <p-select id="status" [(ngModel)]="status" [options]="statusItems"
+                (onChange)="getOrders()" placeholder="Select Status"
+                class="w-full"></p-select>
+        </div>
+    </ng-template>
+</p-toolbar>
+
+<p-table #dt [value]="lista" [rows]="perPage" [paginator]="true" [lazy]="true"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [rowHover]="true" (onPage)="onPageChange($event)" [totalRecords]="total"
+    dataKey="id" [(first)]="first"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} orders"
+    [showCurrentPageReport]="true" (onSort)="onSort($event)">
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Manage Orders</h5>
+        </div>
+    </ng-template>
+    <ng-template #header>
+        <tr>
+            <th style="min-width: 3rem">Id </th>
+            <th style="min-width: 10rem">Status </th>
+            <th style="min-width: 10rem">Waiter</th>
+            <th style="min-width: 10rem">Client</th>
+            <th style="min-width: 10rem">Total </th>
+            <th style="min-width: 10rem">Date ></th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-order>
+        <tr>
+            <td>{{order.id}}</td>
+            <td>
+                <p-tag [value]="order.status"
+                    [severity]="getStatusSeverity(order.status)"></p-tag>
+            </td>
+            <td>{{order.waiter?.name}}</td>
+            <td>{{order.client?.name}}</td>
+            <td>{{order.total | currency:'USD'}}</td>
+            <td>{{order.created_at | date:'short'}}</td>
+        </tr>
+    </ng-template>
+</p-table>

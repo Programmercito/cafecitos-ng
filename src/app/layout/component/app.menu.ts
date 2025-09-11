@@ -26,9 +26,9 @@ export class AppMenu {
             },
             {
                 label: 'Administracion',
-                items: [
+                                items: [
                     { label: 'Productos', icon: 'pi pi-fw pi-box', routerLink: ['/products'] },
-                    { label: 'Usuarios', icon: 'pi pi-fw pi-user', routerLink: ['/users'] }
+                    { label: 'Usuarios', icon: 'pi pi-fw pi-user', routerLink: ['/users'] },
                 ]
             },
             {
@@ -37,9 +37,9 @@ export class AppMenu {
                 routerLink: ['/orders'],
                 items: [
                     {
-                        label: 'Pendientes',
+                        label: 'Mis ordenes',
                         icon: 'pi pi-fw pi-pen-to-square',
-                        routerLink: ['/pending']
+                        routerLink: ['/orders']
                     },
                     {
                         label: 'Historico',
