@@ -67,10 +67,10 @@
                     onerror="this.style.display='none'" />
             </td>
             <td>{{product.type}}</td>
-            <td>{{product.client_price | currency:'USD'}}</td>
-            <td>{{product.animation_price | currency:'USD'}}</td>
-            <td>{{product.waiter_price | currency:'USD'}}</td>
-            <td>{{product.waiter_commission | currency:'USD'}}</td>
+            <td>{{product.client_price | currency:'BOB'}}</td>
+            <td>{{product.animation_price | currency:'BOB'}}</td>
+            <td>{{product.waiter_price | currency:'BOB'}}</td>
+            <td>{{product.waiter_commission | currency:'BOB'}}</td>
             <td>
                 <p-tag [value]="product.is_active ? 'ACTIVE' : 'INACTIVE'"
                     [severity]="product.is_active ? 'success' : 'danger'"></p-tag>
