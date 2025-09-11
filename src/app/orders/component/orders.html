@@ -8,15 +8,14 @@
     </ng-template>
 
     <ng-template #end>
-        <div class="flex gap-2">
+        <div class="flex items-center gap-2">
+            <label for="date_from" class="mr-1">Desde:</label>
             <p-datepicker [(ngModel)]="date_from" (onSelect)="getOrders()"
-                dateFormat="yy-mm-dd" placeholder="Date From"></p-datepicker>
+                dateFormat="yy-mm-dd" id="date_from"
+                placeholder="Date From"></p-datepicker>
+            <label for="date_to" class="mr-1">Hasta:</label>
             <p-datepicker [(ngModel)]="date_to" (onSelect)="getOrders()"
-                dateFormat="yy-mm-dd" placeholder="Date To"></p-datepicker>
-            <p-select id="type" [(ngModel)]="type" [options]="orderTypes"
-                optionLabel="name" optionValue="value"
-                (onChange)="getOrders()" placeholder="Select Type"
-                class="w-full"></p-select>
+                dateFormat="yy-mm-dd" placeholder="Date To" id="date_to"></p-datepicker>
         </div>
     </ng-template>
 </p-toolbar>
@@ -30,8 +29,16 @@
     <ng-template #caption>
         <div class="flex items-center justify-between">
             <h5 class="m-0">Manage Orders</h5>
+            <div>
+
+                <p-select id="type" [(ngModel)]="type" [options]="orderTypes"
+                    optionLabel="name" optionValue="value"
+                    (onChange)="getOrders()" placeholder="Select Type"
+                    class="w-full"></p-select>
+            </div>
         </div>
     </ng-template>
+
     <ng-template #header>
         <tr>
             <th style="min-width: 3rem">Id </th>
