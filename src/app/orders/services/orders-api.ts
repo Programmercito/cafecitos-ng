@@ -14,21 +14,17 @@ export class OrdersApiService {
   constructor(private http: HttpClient) { }
 
   getOrders(
-    status?: string,
+    type?: string,
     date_from?: string,
     date_to?: string,
     sort?: string,
     page: number = 1,
-    lenPage: number = 15,
-    type?: string
+    lenPage: number = 15
   ): Observable<PaginatedResponse<Order>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('lenPage', lenPage.toString());
 
-    if (status) {
-      params = params.set('status', status);
-    }
     if (date_from) {
       params = params.set('date_from', date_from);
     }
@@ -39,7 +35,7 @@ export class OrdersApiService {
       params = params.set('sort', sort);
     }
     if (type) {
-      params = params.set('type', type);
+      params = params.set('status', type);
     }
 
     return this.http.get<PaginatedResponse<Order>>(this.apiUrl, { params });

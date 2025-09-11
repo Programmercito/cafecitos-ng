@@ -43,7 +43,7 @@ throw new Error('Method not implemented.');
   type: string = '';
   date_from: string = '';
   date_to: string = '';
-  sort: string = '';
+  sort: string = 'desc';
   page: number = 1;
   perPage: number = 15;
   pagination!: Pagination;
@@ -64,13 +64,21 @@ throw new Error('Method not implemented.');
   ) {}
 
   ngOnInit(): void {
-    this.getOrders();
+    const today = new Date();
+    const twoWeeksAgo = new Date(new Date().setDate(today.getDate() - 20));
+    this.date_to = today.toISOString().substring(0, 10);
+    this.date_from = twoWeeksAgo.toISOString().substring(0, 10);
     this.loadOrderTypes();
   }
 
   loadOrderTypes() {
     this.ordersService.getOrderTypes().subscribe(types => {
-      this.orderTypes = [{name: 'All', value: ''}, ...types];
+      this.orderTypes = types;
+      console.log(this.orderTypes);
+      if (this.orderTypes.length > 0) {
+        this.type = this.orderTypes[0].value;
+      }
+      this.getOrders();
     });
   }
 
@@ -78,7 +86,7 @@ throw new Error('Method not implemented.');
     const d_from = this.date_from ? new Date(this.date_from).toISOString().split('T')[0] : undefined;
     const d_to = this.date_to ? new Date(this.date_to).toISOString().split('T')[0] : undefined;
 
-    this.ordersService.getOrders(this.status, d_from, d_to, this.sort, this.page, this.perPage, this.type).subscribe({
+    this.ordersService.getOrders(this.type, d_from, d_to, this.sort, this.page, this.perPage).subscribe({
       next: (response) => {
         this.lista = response.data;
         this.pagination = response.pagination;
@@ -103,13 +111,16 @@ throw new Error('Method not implemented.');
   }
 
   getStatusSeverity(status: string): string {
-    switch (status.toLowerCase()) {
-      case 'completed':
+    switch (status.toUpperCase()) {
+      case 'PAID':
+      case 'PROCESSED':
+      case 'CLOSED':
         return 'success';
-      case 'pending':
+      case 'COMMISSIONING':
         return 'warning';
-      case 'cancelled':
+      case 'VOIDED':
         return 'danger';
+      case 'OPEN':
       default:
         return 'info';
     }
