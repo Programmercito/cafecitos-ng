@@ -46,8 +46,6 @@ export class Orders implements OnInit {
         this.currentOrder = order;
         this.orderDialog = true;
         console.log(this.currentOrder);
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order created' });
-        // Refresh list to include the newly created order
         this.getOrders();
       },
       error: () => {
