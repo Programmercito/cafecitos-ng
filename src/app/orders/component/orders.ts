@@ -21,6 +21,7 @@ import { Order } from '@/libs/models/order.model';
 import { OrdersApiService } from '../services/orders-api';
 import { SortIcon } from 'primeng/table';
 import { DatePickerModule } from 'primeng/datepicker';
+import { Common } from '@/libs/components/Common';
 
 @Component({
   selector: 'app-orders',
@@ -34,7 +35,8 @@ import { DatePickerModule } from 'primeng/datepicker';
   templateUrl: './orders.html',
   styleUrl: './orders.scss'
 })
-export class Orders implements OnInit {
+export class Orders extends Common implements OnInit {
+
   orderDialog: boolean = false;
   submitted: boolean = false;
   currentOrder!: Order;
@@ -71,17 +73,19 @@ export class Orders implements OnInit {
     { label: 'Completed', value: 'completed' },
     { label: 'Cancelled', value: 'cancelled' },
   ];
-  orderTypes: {name: string, value: string}[] = [];
+  orderTypes: { name: string, value: string }[] = [];
 
   constructor(
     private ordersService: OrdersApiService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     const tod = new Date();
-    const today = new Date(new Date().setDate(tod.getDate() +1));
+    const today = new Date(new Date().setDate(tod.getDate() + 1));
     const twoWeeksAgo = new Date(new Date().setDate(today.getDate() - 20));
     this.date_to = today.toISOString().substring(0, 10);
     this.date_from = twoWeeksAgo.toISOString().substring(0, 10);
@@ -162,6 +166,42 @@ export class Orders implements OnInit {
         this.ordersService.closeOrder(order.id).subscribe({
           next: () => {
             this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Closed', life: 3000 });
+            this.getOrders();
+          },
+          error: (err) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
+          }
+        });
+      }
+    });
+  }
+  paidOrder(order: Order) {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to paid order ' + order.id + '?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.ordersService.paidOrder(order.id).subscribe({
+          next: () => {
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order mark paid', life: 3000 });
+            this.getOrders();
+          },
+          error: (err) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
+          }
+        });
+      }
+    });
+  }
+  voidedOrder(order: Order) {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to voided order ' + order.id + '?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.ordersService.voidedOrder(order.id).subscribe({
+          next: () => {
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order mark paid', life: 3000 });
             this.getOrders();
           },
           error: (err) => {

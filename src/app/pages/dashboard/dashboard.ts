@@ -27,7 +27,7 @@ import { Router } from '@angular/router';
 export class Dashboard extends Common {
     constructor(private route: Router) {
         super();
-        if (!this.getCurrectUser().id) {
+        if (!this.getCurrentUser().id) {
             this.route.navigate(['/auth/login']);
         }
     }

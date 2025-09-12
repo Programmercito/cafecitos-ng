@@ -9,6 +9,7 @@ import { Order } from '@/libs/models/order.model';
 })
 export class OrdersApiService {
 
+
   private apiUrl = '/api/me/orders';
 
   constructor(private http: HttpClient) { }
@@ -41,8 +42,8 @@ export class OrdersApiService {
     return this.http.get<PaginatedResponse<Order>>(this.apiUrl, { params });
   }
 
-  getOrderTypes(): Observable<{name: string, value: string}[]> {
-    return this.http.get<{name: string, value: string}[]>('/api/orders/types');
+  getOrderTypes(): Observable<{ name: string, value: string }[]> {
+    return this.http.get<{ name: string, value: string }[]>('/api/orders/types');
   }
 
   // Creates a new order and returns it (expects backend to return created Order with id)
@@ -52,5 +53,11 @@ export class OrdersApiService {
 
   closeOrder(orderId: number): Observable<any> {
     return this.http.patch(`/api/orders/${orderId}/status/CLOSED`, {});
+  }
+  paidOrder(orderId: number): Observable<any> {
+    return this.http.patch(`/api/orders/${orderId}/status/PAID`, {});
+  }
+  voidedOrder(orderId: number): Observable<any> {
+    return this.http.patch(`/api/orders/${orderId}/status/VOIDED`, {});
   }
 }

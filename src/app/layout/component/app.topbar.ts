@@ -11,11 +11,13 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { UsersApiService } from 'src/app/users/services/users-api';
 import { Menu } from 'primeng/menu';
+import { Tooltip } from "primeng/tooltip";
+import { Common } from '@/libs/components/Common';
 
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator, Logo, MenuModule, ConfirmDialogModule, ToastModule],
+    imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator, Logo, MenuModule, ConfirmDialogModule, ToastModule, Tooltip],
     providers: [MessageService, ConfirmationService, UsersApiService],
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
@@ -50,7 +52,7 @@ import { Menu } from 'primeng/menu';
             </div>
 
                 <div class="layout-topbar-menu-content">
-                    <button type="button" class="layout-topbar-action" (click)="toggleMenu($event)">
+                    <button type="button" class="layout-topbar-action" (click)="toggleMenu($event)" [pTooltip]="this.getCurrentUser().username">
                         <i class="pi pi-user"></i>
                         <span>Usuario</span>
                     </button>
@@ -61,7 +63,7 @@ import { Menu } from 'primeng/menu';
         <p-confirmDialog></p-confirmDialog>
     </div>`
 })
-export class AppTopbar implements OnInit {
+export class AppTopbar extends Common implements OnInit {
     items!: MenuItem[];
     menuItems: MenuItem[] = [];
 
@@ -71,7 +73,9 @@ export class AppTopbar implements OnInit {
         private usersService: UsersApiService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
-        private router: Router) { }
+        private router: Router) { 
+            super();
+        }
 
     ngOnInit(): void {
         this.menuItems = [

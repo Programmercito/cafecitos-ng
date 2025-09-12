@@ -28,7 +28,7 @@ import { catchError, tap } from 'rxjs/operators';
     CommonModule,
     ToolbarModule, ButtonModule, TableModule, IconFieldModule, InputIconModule, 
     SelectModule, FormsModule, InputTextModule, DialogModule, InputNumberModule,
-    FileUploadModule, ToastModule, ConfirmDialogModule, CurrencyPipe, TagModule
+    FileUploadModule, ToastModule, ConfirmDialogModule, TagModule
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './users.html',

@@ -3,8 +3,11 @@
 
 <p-toolbar>
     <ng-template #start>
+        @if(this.getCurrentUser().type === 'WAITER' ||
+        this.getCurrentUser().type === 'IN_CHARGE'){
         <p-button label="New" icon="pi pi-plus" severity="secondary"
             class="mr-2" (onClick)="openNew()" />
+        }
     </ng-template>
 
     <ng-template #end>
@@ -15,7 +18,8 @@
                 placeholder="Date From"></p-datepicker>
             <label for="date_to" class="mr-1">Hasta:</label>
             <p-datepicker [(ngModel)]="date_to" (onSelect)="getOrders()"
-                dateFormat="yy-mm-dd" placeholder="Date To" id="date_to"></p-datepicker>
+                dateFormat="yy-mm-dd" placeholder="Date To"
+                id="date_to"></p-datepicker>
         </div>
     </ng-template>
 </p-toolbar>
@@ -55,12 +59,36 @@
         <tr>
             <td>{{order.id}}</td>
             <td>
-                @if(order.status === 'OPEN'){
+                @if(order.status === 'OPEN' && (
+                (this.getCurrentUser().type === 'WAITER' &&
+                this.getCurrentUser().id === order.waiter.id) ||
+                this.getCurrentUser().type === 'IN_CHARGE')){
                 <p-button icon="pi pi-pencil" severity="info" class="mr-2"
                     (click)="editOrder(order)" pTooltip="Edit Order"></p-button>
-                <p-button icon="pi pi-times-circle" severity="danger"
-                    (click)="closeOrder(order)" pTooltip="Close Order"></p-button>
                 }
+                @if(order.status === 'OPEN' && this.getCurrentUser().id ===
+                order.waiter.id){
+                <p-button icon="pi pi-times-circle" severity="info"
+                    (click)="closeOrder(order)"
+                    pTooltip="Close Order" class="mr-2"></p-button>
+                }
+                @if(order.status === 'CLOSED' &&
+                (
+                this.getCurrentUser().type === 'IN_CHARGE')){
+                <p-button icon="pi pi-dollar" severity="success" class="mr-2"
+                    (click)="paidOrder(order)"
+                    pTooltip="Mark as Paid Order"></p-button>
+                }
+                @if(
+                ((order.status === 'CLOSED' || order.status === 'PAID') &&
+                this.getCurrentUser().type === 'IN_CHARGE')
+                ){
+                <p-button icon="pi pi-exclamation-triangle" severity="danger"
+                    class="mr-2"
+                    (click)="voidedOrder(order)"
+                    pTooltip="Voided Order"></p-button>
+                }
+
             </td>
             <td>
                 <p-tag [value]="order.status"
