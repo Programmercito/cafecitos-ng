@@ -76,6 +76,7 @@ export class Orders implements OnInit {
   constructor(
     private ordersService: OrdersApiService,
     private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
@@ -150,5 +151,24 @@ export class Orders implements OnInit {
   hideDialog() {
     this.orderDialog = false;
     this.submitted = false;
+  }
+
+  closeOrder(order: Order) {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to close order ' + order.id + '?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.ordersService.closeOrder(order.id).subscribe({
+          next: () => {
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Closed', life: 3000 });
+            this.getOrders();
+          },
+          error: (err) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
+          }
+        });
+      }
+    });
   }
 }

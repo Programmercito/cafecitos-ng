@@ -49,4 +49,8 @@ export class OrdersApiService {
   createOrder(): Observable<Order> {
     return this.http.post<Order>('/api/orders', {});
   }
+
+  closeOrder(orderId: number): Observable<any> {
+    return this.http.patch(`/api/orders/${orderId}/status/CLOSED`, {});
+  }
 }

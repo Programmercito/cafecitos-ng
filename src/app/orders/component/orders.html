@@ -58,6 +58,8 @@
                 @if(order.status === 'OPEN'){
                 <p-button icon="pi pi-pencil" severity="info" class="mr-2"
                     (click)="editOrder(order)" pTooltip="Edit Order"></p-button>
+                <p-button icon="pi pi-times-circle" severity="danger"
+                    (click)="closeOrder(order)" pTooltip="Close Order"></p-button>
                 }
             </td>
             <td>
