@@ -95,7 +95,7 @@
                     [severity]="getStatusSeverity(order.status)"></p-tag>
             </td>
 
-            <td>{{order.waiter.username}}</td>
+            <td>{{order.waiter.first_name}} {{order.waiter.last_name}}</td>
             <td>{{order.order_date | date:'yyyy-MM-dd'}}</td>
             <td>{{order.price_final | currency:'USD'}}</td>
             <td>{{order.waiter_comision ?? 0 | currency:'USD'}}</td>
@@ -119,7 +119,7 @@
             </div>
             <div>
                 <label class="block font-bold mb-1">Waiter</label>
-                <div>{{ currentOrder.waiter.username }}</div>
+                <div>{{ currentOrder.waiter.first_name }} {{ currentOrder.waiter.last_name }}</div>
             </div>
             <div>
                 <label class="block font-bold mb-1">Date</label>
