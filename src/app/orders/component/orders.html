@@ -55,8 +55,10 @@
         <tr>
             <td>{{order.id}}</td>
             <td>
+                @if(order.status === 'OPEN'){
                 <p-button icon="pi pi-pencil" severity="info" class="mr-2"
                     (click)="editOrder(order)" pTooltip="Edit Order"></p-button>
+                }
             </td>
             <td>
                 <p-tag [value]="order.status"
