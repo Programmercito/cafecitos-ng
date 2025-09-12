@@ -75,7 +75,7 @@
 <p-dialog [(visible)]="orderDialog" [style]="{ width: '500px' }"
     header="Order Details" [modal]="true">
     <ng-template pTemplate="content">
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-row flex-wrap gap-4">
             <div>
                 <label class="block font-bold mb-1">Order ID</label>
                 <div>{{ currentOrder.id }}</div>
