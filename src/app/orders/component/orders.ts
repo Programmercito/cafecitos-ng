@@ -80,7 +80,8 @@ export class Orders implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const today = new Date();
+    const tod = new Date();
+    const today = new Date(new Date().setDate(tod.getDate() +1));
     const twoWeeksAgo = new Date(new Date().setDate(today.getDate() - 20));
     this.date_to = today.toISOString().substring(0, 10);
     this.date_from = twoWeeksAgo.toISOString().substring(0, 10);
