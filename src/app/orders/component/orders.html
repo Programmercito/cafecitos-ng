@@ -63,7 +63,7 @@
                     [severity]="getStatusSeverity(order.status)"></p-tag>
             </td>
 
-            <td>{{order.waiter?.username}}</td>
+            <td>{{order.waiter.username}}</td>
             <td>{{order.order_date | date:'yyyy-MM-dd'}}</td>
             <td>{{order.price_final | currency:'USD'}}</td>
             <td>{{order.waiter_comision ?? 0 | currency:'USD'}}</td>

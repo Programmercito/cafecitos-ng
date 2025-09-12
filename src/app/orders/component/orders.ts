@@ -45,6 +45,7 @@ export class Orders implements OnInit {
       next: (order) => {
         this.currentOrder = order;
         this.orderDialog = true;
+        console.log(this.currentOrder);
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order created' });
         // Refresh list to include the newly created order
         this.getOrders();
@@ -61,7 +62,7 @@ export class Orders implements OnInit {
   date_to: string = '';
   sort: string = 'desc';
   page: number = 1;
-  perPage: number = 15;
+  perPage: number = 3;
   pagination!: Pagination;
   first: number = 0;
   total!: number;
