@@ -51,13 +51,13 @@ export class OrdersApiService {
     return this.http.post<Order>('/api/orders', {});
   }
 
-  closeOrder(orderId: number): Observable<any> {
-    return this.http.patch(`/api/orders/${orderId}/status/CLOSED`, {});
+  closeOrder(orderId: number): Observable<Order> {
+    return this.http.patch<Order>(`/api/orders/${orderId}/status/CLOSED`, {});
   }
-  paidOrder(orderId: number): Observable<any> {
-    return this.http.patch(`/api/orders/${orderId}/status/PAID`, {});
+  paidOrder(orderId: number): Observable<Order> {
+    return this.http.patch<Order>(`/api/orders/${orderId}/status/PAID`, {});
   }
-  voidedOrder(orderId: number): Observable<any> {
-    return this.http.patch(`/api/orders/${orderId}/status/VOIDED`, {});
+  voidedOrder(orderId: number): Observable<Order> {
+    return this.http.patch<Order>(`/api/orders/${orderId}/status/VOIDED`, {});
   }
 }
