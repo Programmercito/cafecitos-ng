@@ -1,13 +1,11 @@
 export interface Order {
-    id: number;
-    status: string;
-    total: number;
-    created_at: string;
-    waiter?: {
-        name: string;
-    };
-    client?: {
-        name: string;
-    };
-    items: any[];
+  id: number;
+  status: string;
+  waiter?: {
+    username: string;
+  };
+  order_date: string; // ISO date string
+  price_final: number;
+  waiter_commission: number;
+  updated_at: string; // ISO date string
 }

@@ -35,9 +35,25 @@ import { DatePickerModule } from 'primeng/datepicker';
   styleUrl: './orders.scss'
 })
 export class Orders implements OnInit {
-openNew() {
-throw new Error('Method not implemented.');
-}
+  orderDialog: boolean = false;
+  submitted: boolean = false;
+  currentOrder!: Order;
+
+  openNew() {
+    this.submitted = false;
+    this.ordersService.createOrder().subscribe({
+      next: (order) => {
+        this.currentOrder = order;
+        this.orderDialog = true;
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order created' });
+        // Refresh list to include the newly created order
+        this.getOrders();
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error creating order' });
+      }
+    });
+  }
   lista: Order[] = [];
   status: string = '';
   type: string = '';
@@ -124,5 +140,15 @@ throw new Error('Method not implemented.');
       default:
         return 'info';
     }
+  }
+
+  editOrder(order: Order) {
+    this.currentOrder = { ...order };
+    this.orderDialog = true;
+  }
+
+  hideDialog() {
+    this.orderDialog = false;
+    this.submitted = false;
   }
 }

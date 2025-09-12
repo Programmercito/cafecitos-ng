@@ -44,4 +44,9 @@ export class OrdersApiService {
   getOrderTypes(): Observable<{name: string, value: string}[]> {
     return this.http.get<{name: string, value: string}[]>('/api/orders/types');
   }
+
+  // Creates a new order and returns it (expects backend to return created Order with id)
+  createOrder(): Observable<Order> {
+    return this.http.post<Order>('/api/orders', {});
+  }
 }
