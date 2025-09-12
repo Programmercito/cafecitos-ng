@@ -21,7 +21,7 @@ import { Common } from '@/libs/components/Common';
     providers: [MessageService, ConfirmationService, UsersApiService],
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
-            <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()">
+            <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()" [pTooltip]="this.getCurrentUser().username">
                 <i class="pi pi-bars"></i>
             </button>
             <a class="layout-topbar-logo" routerLink="/">
@@ -52,7 +52,7 @@ import { Common } from '@/libs/components/Common';
             </div>
 
                 <div class="layout-topbar-menu-content">
-                    <button type="button" class="layout-topbar-action" (click)="toggleMenu($event)" [pTooltip]="this.getCurrentUser().username">
+                    <button type="button" class="layout-topbar-action" (click)="toggleMenu($event)" >
                         <i class="pi pi-user"></i>
                         <span>Usuario</span>
                     </button>
