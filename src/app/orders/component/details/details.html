@@ -1,1 +1,34 @@
-<p>details works!</p>
+<p-table #dt [value]="details" [paginator]="false" [lazy]="true"
+    [tableStyle]="{ 'min-width': '35rem' }">
+    <ng-template #caption>
+        <div class="flex items-center justify-between gap-2">
+            <h5 class="m-0">Productos</h5>
+            @if(this.getCurrentUser().type === 'WAITER' ||
+            this.getCurrentUser().type === 'IN_CHARGE'){
+            <p-button label="New" icon="pi pi-plus" severity="secondary"
+                class="mr-2" (onClick)="openNew()" />
+            }
+        </div>
+    </ng-template>
+
+    <ng-template #header>
+        <tr>
+            <th style="min-width: 3rem"> </th>
+            <th style="min-width: 2rem">Producto</th>
+            <th style="min-width: 2rem">Cantidad</th>
+            <th style="min-width: 2rem">Precio</th>
+            <th style="min-width: 3rem">Tipo</th>
+            <th style="min-width: 3rem">Observación</th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-orderdetail>
+        <tr>
+            <td></td>
+            <td>{{orderdetail.product.description}}</td>
+            <td>{{orderdetail.quantity}}</td>
+            <td>{{orderdetail.price | currency:'BOB'}}</td>
+            <td>{{orderdetail.type}}</td>
+            <td>{{orderdetail.observation}}</td>
+        </tr>
+    </ng-template>
+</p-table>

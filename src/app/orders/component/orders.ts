@@ -22,6 +22,7 @@ import { OrdersApiService } from '../services/orders-api';
 import { SortIcon } from 'primeng/table';
 import { DatePickerModule } from 'primeng/datepicker';
 import { Common } from '@/libs/components/Common';
+import { Details } from "./details/details";
 
 @Component({
   selector: 'app-orders',
@@ -29,8 +30,9 @@ import { Common } from '@/libs/components/Common';
     CommonModule, FormsModule,
     ToolbarModule, ButtonModule, TableModule, IconFieldModule, InputIconModule,
     SelectModule, InputTextModule, DialogModule, ToastModule, ConfirmDialogModule,
-    CurrencyPipe, TagModule, DatePipe, DatePickerModule, TooltipModule
-  ],
+    CurrencyPipe, TagModule, DatePipe, DatePickerModule, TooltipModule,
+    Details
+],
   providers: [MessageService, ConfirmationService],
   templateUrl: './orders.html',
   styleUrl: './orders.scss'

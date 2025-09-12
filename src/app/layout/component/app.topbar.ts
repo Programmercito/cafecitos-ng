@@ -21,7 +21,7 @@ import { Common } from '@/libs/components/Common';
     providers: [MessageService, ConfirmationService, UsersApiService],
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
-            <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()" [pTooltip]="this.getCurrentUser().username">
+            <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()" [pTooltip]="this.getCurrentUser().username+' '+this.getCurrentUser().type">
                 <i class="pi pi-bars"></i>
             </button>
             <a class="layout-topbar-logo" routerLink="/">
@@ -73,9 +73,9 @@ export class AppTopbar extends Common implements OnInit {
         private usersService: UsersApiService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService,
-        private router: Router) { 
-            super();
-        }
+        private router: Router) {
+        super();
+    }
 
     ngOnInit(): void {
         this.menuItems = [
