@@ -62,7 +62,7 @@ export class Orders implements OnInit {
   date_to: string = '';
   sort: string = 'desc';
   page: number = 1;
-  perPage: number = 3;
+  perPage: number = 15;
   pagination!: Pagination;
   first: number = 0;
   total!: number;
