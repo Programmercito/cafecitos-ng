@@ -49,11 +49,6 @@ import { Menu } from 'primeng/menu';
                 </div>
             </div>
 
-            <button class="layout-topbar-menu-button layout-topbar-action" pStyleClass="@next" enterFromClass="hidden" enterActiveClass="animate-scalein" leaveToClass="hidden" leaveActiveClass="animate-fadeout" [hideOnOutsideClick]="true">
-                <i class="pi pi-ellipsis-v"></i>
-            </button>
-
-            <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
                     <button type="button" class="layout-topbar-action" (click)="toggleMenu($event)">
                         <i class="pi pi-user"></i>
@@ -61,7 +56,6 @@ import { Menu } from 'primeng/menu';
                     </button>
                     <p-menu #menu [model]="menuItems" [popup]="true"></p-menu>
                 </div>
-            </div>
         </div>
         <p-toast></p-toast>
         <p-confirmDialog></p-confirmDialog>
