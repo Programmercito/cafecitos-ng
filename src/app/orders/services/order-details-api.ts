@@ -19,7 +19,7 @@ export class OrderDetailsApi {
     return this.http.get<OrderDetail[]>(this.url + "/" + orderId);
   }
 
-  createDetail(detail: Partial<OrderDetail>) {
+  createDetail(detail: OrderDetail) {
     return this.http.post<OrderDetail>(this.url, detail);
   }
 

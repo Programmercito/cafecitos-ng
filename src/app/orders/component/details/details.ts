@@ -9,21 +9,26 @@ import { TableModule } from "primeng/table";
 import { ButtonModule } from "primeng/button";
 import { DialogModule } from "primeng/dialog";
 import { SelectModule } from 'primeng/select';
+import { ProductService } from '@/pages/service/product.service';
+import { ProductsApiService } from '@/products/services/products-api';
+import { PaginatedResponse } from '@/libs/models/paginated-response.model';
+import { ProductsModel } from '@/libs/models/products-model';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-details',
-  imports: [TableModule, FormsModule, CurrencyPipe, ButtonModule, DialogModule, SelectModule],
+  imports: [TableModule, FormsModule, CurrencyPipe, ButtonModule, DialogModule, SelectModule, InputNumberModule, InputTextModule],
   templateUrl: './details.html',
   styleUrl: './details.scss'
 })
 export class Details extends Common {
-  saveProduct() {
-  }
-  hideDialog() {
-  }
+
   orderDetDialog: boolean = false;
   currentDetail!: OrderDetail;
-  types: {name: string, value: string}[] = [];
+  types: { name: string, value: string }[] = [];
+  products!: PaginatedResponse<ProductsModel>;
+  product!: ProductsModel;
   openNew() {
     this.currentDetail = {} as OrderDetail;
     this.orderDetDialog = true;
@@ -31,13 +36,34 @@ export class Details extends Common {
   details: OrderDetail[] = [];
   @Input() orderId!: number;
   constructor(private detailservice: OrderDetailsApi,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private productService: ProductsApiService
   ) {
     super();
+  }
+  saveDetail() {
+    this.currentDetail.product_id = this.product.id;
+    this.currentDetail.order_id = this.orderId;
+    console.log(this.currentDetail);
+    this.detailservice.createDetail(this.currentDetail).subscribe({
+      next: (response) => {
+        this.getOrderDetails();
+        this.hideDialog();
+      },
+      error: (error) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error creating order detail' });
+      }
+    });
+
+  }
+
+  hideDialog() {
+    this.orderDetDialog = false;
   }
   ngOnInit() {
     this.getOrderDetails();
     this.getDetailType();
+    this.getProducts();
   }
   getOrderDetails() {
     this.detailservice.getOrderDetails(this.orderId).subscribe({
@@ -66,6 +92,17 @@ export class Details extends Common {
       },
       error: (error) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error fetching details types' });
+      }
+    });
+  }
+  getProducts() {
+    this.productService.getProducts(true, '', 1, 99999).subscribe({
+      next: (response) => {
+        this.products = response;
+        console.log(this.products);
+      },
+      error: (error) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error fetching products' });
       }
     });
   }

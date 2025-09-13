@@ -45,7 +45,8 @@
     </ng-template>
 </p-table>
 <p-dialog [(visible)]="orderDetDialog" [breakpoints]="{'768px': '100vw'}"
-    [style]="{width: '50vw'}" header="Productos">
+    [style]="{width: '50vw'}" header="Productos" (onHide)="hideDialog()"
+    closable="false" modal="true">
     <ng-template pTemplate="content">
         <div class="flex flex-col gap-6">
             <div>
@@ -55,6 +56,41 @@
                     optionValue="value" placeholder="Select a Type"
                     fluid></p-select>
             </div>
+            <div>
+                <label for="type" class="block font-bold mb-3">Product</label>
+                <p-select [options]="products.data"
+                    [(ngModel)]="product"
+                    optionLabel="description" [filter]="true"
+                    filterBy="description"
+                    [showClear]="true" placeholder="Select a Product" fluid
+                    class="w-full md:w-56">
+                    <ng-template #selectedItem let-selectedOption>
+                        <div class="flex items-center gap-2">
+                            <div>{{ selectedOption.description }}</div>
+                        </div>
+                    </ng-template>
+                    <ng-template let-product #item>
+                        <div class="flex items-center gap-2">
+                            <div>{{ product.description }}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+            </div>
+            <div>
+                <label for="quantity"
+                    class="block font-bold mb-3">Quantity</label>
+                <p-inputnumber id="client_price"
+                    [(ngModel)]="currentDetail.quantity" mode="decimal"
+                    fluid></p-inputnumber>
+            </div>
+            <div>
+                <label for="observation"
+                    class="block font-bold mb-3">Observation</label>
+                <input type="text" pInputText
+                    [(ngModel)]="currentDetail.observation" id="observation"
+                    fluid />
+
+            </div>
         </div>
     </ng-template>
 
@@ -62,7 +98,7 @@
         <p-button label="Cancel" icon="pi pi-times" severity="secondary"
             (click)="hideDialog()"></p-button>
         <p-button label="Save" icon="pi pi-check"
-            (click)="saveProduct()"></p-button>
+            (click)="saveDetail()"></p-button>
     </ng-template>
 
 </p-dialog>
