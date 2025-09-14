@@ -3,8 +3,8 @@
     <ng-template #caption>
         <div class="flex items-center justify-between gap-2">
             <h5 class="m-0">Productos</h5>
-            @if(this.getCurrentUser().type === 'WAITER' ||
-            this.getCurrentUser().type === 'IN_CHARGE'){
+            @if(order.status === 'OPEN' && (this.getCurrentUser().id ===
+            order.waiter.id )){
             <p-button label="New" icon="pi pi-plus" severity="secondary"
                 class="mr-2" (onClick)="openNew()" />
             }
@@ -23,14 +23,28 @@
     </ng-template>
     <ng-template #body let-orderdetail>
         <tr>
-            <td></td>
+            <td>
+                @if(order.status === 'OPEN' && (this.getCurrentUser().type ===
+                'IN_CHARGE' ||this.getCurrentUser().type === 'IN_CHARGE')){
+                <p-button icon="pi pi-pencil" severity="info" class="mr-2"
+                    (click)="editDetail(orderdetail)"
+                    pTooltip="Edit detail"></p-button>
+                <p-button icon="pi pi-pencil" severity="danger" class="mr-2"
+                    (click)="deleteDetail(orderdetail)"
+                    pTooltip="Delete detail"></p-button>
+                }
+            </td>
             <td>{{orderdetail.product.description}}
                 {{orderdetail.type==='CLIENT'?
-                orderdetail.product.client_price:orderdetail.type==='WAITER'?orderdetail.product.waiter_price:orderdetail.product.animation_price
-                | currency:'BOB'}} Bs.
+                orderdetail.product.client_price:orderdetail.type==='WAITER'?orderdetail.product.waiter_price:orderdetail.product.animation_price}}
+                Bs.
             </td>
             <td>{{orderdetail.quantity}}</td>
-            <td>{{orderdetail.price | currency:'BOB'}}</td>
+            <td>
+                <div class="text-right">
+                    {{orderdetail.price}}
+                </div>
+            </td>
             <td>{{orderdetail.type}}</td>
             <td>{{orderdetail.observation}}</td>
         </tr>
@@ -39,8 +53,14 @@
         <tr>
             <td></td>
             <td></td>
-            <td>Total</td>
-            <td>{{this.totalpay()}}</td>
+            <td>
+                Total
+            </td>
+            <td>
+                <div class="text-right">
+                    {{this.totalpay()}}
+                </div>
+            </td>
         </tr>
     </ng-template>
 </p-table>

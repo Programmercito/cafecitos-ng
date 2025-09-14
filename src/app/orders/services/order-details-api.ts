@@ -23,7 +23,7 @@ export class OrderDetailsApi {
     return this.http.post<OrderDetail>(this.url, detail);
   }
 
-  updateDetail(id: number, detail: Partial<OrderDetail>) {
+  updateDetail(id: number, detail:OrderDetail) {
     return this.http.put<OrderDetail>(`${this.url}/${id}`, detail);
   }
 

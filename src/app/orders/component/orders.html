@@ -59,10 +59,13 @@
         <tr>
             <td>{{order.id}}</td>
             <td>
-                @if(order.status === 'OPEN' && this.getCurrentUser().id ===
-                order.waiter.id){
+                @if(order.status === 'OPEN' && (this.getCurrentUser().id ===
+                order.waiter.id || this.getCurrentUser().type === 'IN_CHARGE')){
                 <p-button icon="pi pi-pencil" severity="info" class="mr-2"
                     (click)="editOrder(order)" pTooltip="Edit Order"></p-button>
+                }
+                @if(order.status === 'OPEN' && (this.getCurrentUser().id ===
+                order.waiter.id)){
                 <p-button icon="pi pi-times-circle" severity="info"
                     (click)="closeOrder(order)"
                     pTooltip="Close Order" class="mr-2"></p-button>
@@ -75,8 +78,10 @@
                     pTooltip="Mark as Paid Order"></p-button>
                 }
                 @if(
-                ((order.status === 'CLOSED' || order.status === 'PAID') &&
-                this.getCurrentUser().type === 'IN_CHARGE')
+                (order.status === 'CLOSED' || order.status === 'PAID' ||
+                order.status === 'COMISSIONED') &&
+                (this.getCurrentUser().type === 'IN_CHARGE' ||
+                this.getCurrentUser().type === 'ADMINISTRATOR')
                 ){
                 <p-button icon="pi pi-exclamation-triangle" severity="danger"
                     class="mr-2"
@@ -125,7 +130,7 @@
 
         </div>
         <div class="mt-4">
-            <app-details [orderId]="currentOrder.id"></app-details>
+            <app-details [order]="currentOrder"></app-details>
         </div>
     </ng-template>
     <ng-template pTemplate="footer">

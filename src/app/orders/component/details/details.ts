@@ -1,5 +1,5 @@
 import { Common } from '@/libs/components/Common';
-import { OrderDetail } from '@/libs/models/order.model';
+import { Order, OrderDetail } from '@/libs/models/order.model';
 import { OrderDetailsApi } from '@/orders/services/order-details-api';
 import { CurrencyPipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
@@ -23,18 +23,34 @@ import { InputTextModule } from 'primeng/inputtext';
   styleUrl: './details.scss'
 })
 export class Details extends Common {
+  editDetail(orderdetail: OrderDetail) {
+    this.currentDetail = {} as OrderDetail;
+    this.orderDetDialog = true;
+    this.product = orderdetail.product;
+    this.currentDetail.order_id = orderdetail.order_id;
+    this.currentDetail.product_id = orderdetail.product_id;
+    this.currentDetail.quantity = orderdetail.quantity;
+    this.currentDetail.price = orderdetail.price;
+    this.currentDetail.type = orderdetail.type;
+    this.currentDetail.observation = orderdetail.observation;
+    this.currentid = orderdetail.id;
+    this.typeoption = "edit";
+  }
 
   orderDetDialog: boolean = false;
   currentDetail!: OrderDetail;
   types: { name: string, value: string }[] = [];
   products!: PaginatedResponse<ProductsModel>;
   product!: ProductsModel;
+  typeoption: string = "";
+  currentid!: number;
   openNew() {
     this.currentDetail = {} as OrderDetail;
     this.orderDetDialog = true;
+    this.typeoption = "new";
   }
   details: OrderDetail[] = [];
-  @Input() orderId!: number;
+  @Input() order!: Order;
   constructor(private detailservice: OrderDetailsApi,
     private messageService: MessageService,
     private productService: ProductsApiService
@@ -43,30 +59,41 @@ export class Details extends Common {
   }
   saveDetail() {
     this.currentDetail.product_id = this.product.id;
-    this.currentDetail.order_id = this.orderId;
-    console.log(this.currentDetail);
-    this.detailservice.createDetail(this.currentDetail).subscribe({
-      next: (response) => {
-        this.getOrderDetails();
-        this.hideDialog();
-      },
-      error: (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error creating order detail' });
-      }
-    });
-
+    this.currentDetail.order_id = this.order.id;
+    if (this.typeoption === "new") {
+      this.detailservice.createDetail(this.currentDetail).subscribe({
+        next: (response) => {
+          this.getOrderDetails();
+          this.hideDialog();
+        },
+        error: (error) => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error creating order detail' });
+        }
+      });
+    } else {
+      this.detailservice.updateDetail(this.currentid, this.currentDetail).subscribe({
+        next: (response) => {
+          this.getOrderDetails();
+          this.hideDialog();
+        },
+        error: (error) => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error updating order detail' });
+        }
+      });
+    }
   }
 
   hideDialog() {
     this.orderDetDialog = false;
   }
+  
   ngOnInit() {
     this.getOrderDetails();
     this.getDetailType();
     this.getProducts();
   }
   getOrderDetails() {
-    this.detailservice.getOrderDetails(this.orderId).subscribe({
+    this.detailservice.getOrderDetails(this.order.id).subscribe({
       next: (response) => {
         this.details = response;
         console.log(this.details);
@@ -106,4 +133,16 @@ export class Details extends Common {
       }
     });
   }
+
+  deleteDetail(orderDetail: OrderDetail) {
+    this.detailservice.deleteDetail(orderDetail.id).subscribe({
+      next: (response) => {
+        this.getOrderDetails();
+      },
+      error: (error) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error deleting order detail' });
+      }
+    });
+  }
+
 }
