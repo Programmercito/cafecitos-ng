@@ -23,6 +23,7 @@ import { SortIcon } from 'primeng/table';
 import { DatePickerModule } from 'primeng/datepicker';
 import { Common } from '@/libs/components/Common';
 import { Details } from "./details/details";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-orders',
@@ -75,8 +76,7 @@ export class Orders extends Common implements OnInit {
   pagination!: Pagination;
   first: number = 0;
   total!: number;
-
-
+  typeorders: string = '';
   statusItems = [
     { label: 'All', value: '' },
     { label: 'Pending', value: 'pending' },
@@ -88,7 +88,8 @@ export class Orders extends Common implements OnInit {
   constructor(
     private ordersService: OrdersApiService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private route: ActivatedRoute,
   ) {
     super();
   }
@@ -100,6 +101,12 @@ export class Orders extends Common implements OnInit {
     this.date_to = today.toISOString().substring(0, 10);
     this.date_from = twoWeeksAgo.toISOString().substring(0, 10);
     this.loadOrderTypes();
+    this.route.params.subscribe(params => {
+      this.typeorders = params['typeorders'];
+
+    });
+
+
   }
 
   loadOrderTypes() {

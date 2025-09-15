@@ -3,8 +3,8 @@
 
 <p-toolbar>
     <ng-template #start>
-        @if(this.getCurrentUser().type === 'WAITER' ||
-        this.getCurrentUser().type === 'IN_CHARGE'){
+        @if((this.getCurrentUser().type === 'WAITER' ||
+        this.getCurrentUser().type === 'IN_CHARGE') && this.typeorders==='me'){
         <p-button label="New" icon="pi pi-plus" severity="secondary"
             class="mr-2" (onClick)="openNew()" />
         }
@@ -59,6 +59,7 @@
         <tr>
             <td>{{order.id}}</td>
             <td>
+                @if (this.typeorders==='me'){
                 @if(order.status === 'OPEN' && (this.getCurrentUser().id ===
                 order.waiter.id || this.getCurrentUser().type === 'IN_CHARGE')){
                 <p-button icon="pi pi-pencil" severity="info" class="mr-2"
@@ -87,6 +88,7 @@
                     class="mr-2"
                     (click)="voidedOrder(order)"
                     pTooltip="Voided Order"></p-button>
+                }
                 }
                 <p-button icon="pi pi-eye" severity="success"
                     class="mr-2"

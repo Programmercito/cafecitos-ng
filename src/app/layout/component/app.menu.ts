@@ -22,7 +22,7 @@ export class AppMenu {
         this.model = [
             {
                 label: 'Principal',
-                items: [{ label: 'Mis Ordenes', icon: 'pi pi-fw pi-book', routerLink: ['/'] }]
+                items: [{ label: 'Inicio', icon: 'pi pi-fw pi-book', routerLink: ['/'] }]
             },
             {
                 label: 'Administracion',
@@ -39,12 +39,12 @@ export class AppMenu {
                     {
                         label: 'Mis ordenes',
                         icon: 'pi pi-fw pi-pen-to-square',
-                        routerLink: ['/orders']
+                        routerLink: ['/orders/me']
                     },
                     {
                         label: 'Historico',
                         icon: 'pi pi-fw pi-clock',
-                        routerLink: ['/history']
+                        routerLink: ['/orders/history']
                     },
                 ]
             },

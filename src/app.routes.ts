@@ -21,7 +21,7 @@ export const appRoutes: Routes = [
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') },
             { path: 'products', component: Products },
             { path: 'users', component: Users },
-            { path: 'orders', component: Orders },
+            { path: 'orders/:typeorders', component: Orders },
             { path: 'change-password', component: ChangePassword }
         ]
     },
