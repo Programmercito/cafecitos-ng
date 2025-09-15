@@ -51,8 +51,8 @@ export class UsersApiService { // Renamed from UsersApi to UsersApiService for c
     return this.http.patch<void>(`${this.apiUrl}/${id}/status`, { is_active });
   }
 
-  getUsersType(): Observable<{name: string, value: string}[]> {
-    return this.http.get<{name: string, value: string}[]>(`${this.apiUrl}/types`);
+  getUsersType(): Observable<{ name: string, value: string }[]> {
+    return this.http.get<{ name: string, value: string }[]>(`${this.apiUrl}/types`);
   }
 
   logout(): Observable<void> {
@@ -61,5 +61,9 @@ export class UsersApiService { // Renamed from UsersApi to UsersApiService for c
 
   changePassword(current_password: string, new_password: string): Observable<void> {
     return this.http.post<void>('/api/auth/change-password', { current_password, new_password, new_password_confirmation: new_password });
+  }
+
+  getWaiters(username: string) {
+    return this.http.get<UserModel[]>(`/api/users/waiters?username=${username}`);
   }
 }

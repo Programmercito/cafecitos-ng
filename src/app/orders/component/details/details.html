@@ -145,6 +145,7 @@
     (onHide)="hideDialog()"
     closable="false" modal="true">
     <ng-template pTemplate="content">
+        <app-waiters [orderdet]="currentDetail" [view]="view"></app-waiters>
     </ng-template>
 
     <ng-template pTemplate="footer">

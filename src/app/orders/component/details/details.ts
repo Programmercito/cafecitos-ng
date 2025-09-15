@@ -15,10 +15,11 @@ import { PaginatedResponse } from '@/libs/models/paginated-response.model';
 import { ProductsModel } from '@/libs/models/products-model';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
+import { Waiters } from "../waiters/waiters";
 
 @Component({
   selector: 'app-details',
-  imports: [TableModule, FormsModule, ButtonModule, DialogModule, SelectModule, InputNumberModule, InputTextModule],
+  imports: [TableModule, FormsModule, ButtonModule, DialogModule, SelectModule, InputNumberModule, InputTextModule, Waiters],
   templateUrl: './details.html',
   styleUrl: './details.scss'
 })

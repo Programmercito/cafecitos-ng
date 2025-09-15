@@ -1,1 +1,41 @@
-<p>waiters works!</p>
+ <div class="flex flex-col gap-6">
+    <div>
+        <label for="type" class="block font-bold mb-3">Waiter</label>
+        <p-select [options]="waiters"
+            [(ngModel)]="waiter"
+            optionLabel="description" [filter]="true"
+            filterBy="description"
+            [showClear]="true" placeholder="Select a Waiter" fluid
+            class="w-full md:w-56">
+            <ng-template #selectedItem let-selectedOption>
+                <div class="flex items-center gap-2">
+                    <div>{{ selectedOption.username }}</div>
+                </div>
+            </ng-template>
+            <ng-template let-waiter #item>
+                <div class="flex items-center gap-2">
+                    <div>{{ waiter.firstname }} {{ waiter.lastname }}</div>
+                </div>
+            </ng-template>
+        </p-select>
+    </div>
+</div>
+<p-table #dt [value]="this.orderswaiters" [paginator]="false" [lazy]="true"
+    [tableStyle]="{ 'min-width': '35rem' }">
+
+    <ng-template #header>
+        <tr>
+            <th style="min-width: 3rem"> </th>
+            <th style="min-width: 2rem">Waiter</th>
+            <th style="min-width: 2rem">Comision</th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-orderwaiter>
+        <tr>
+
+            <td></td>
+            <td>{{orderwaiter.waiter.first_name}} {{orderwaiter.waiter.last_name}}</td>
+            <td>{{orderwaiter.comision}}</td>
+        </tr>
+    </ng-template>
+</p-table>
