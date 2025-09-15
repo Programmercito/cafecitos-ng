@@ -4,7 +4,7 @@ import { OrderDetailsApi } from '@/orders/services/order-details-api';
 import { CurrencyPipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableModule } from "primeng/table";
 import { ButtonModule } from "primeng/button";
 import { DialogModule } from "primeng/dialog";
@@ -18,11 +18,18 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-details',
-  imports: [TableModule, FormsModule, CurrencyPipe, ButtonModule, DialogModule, SelectModule, InputNumberModule, InputTextModule],
+  imports: [TableModule, FormsModule, ButtonModule, DialogModule, SelectModule, InputNumberModule, InputTextModule],
   templateUrl: './details.html',
   styleUrl: './details.scss'
 })
 export class Details extends Common {
+  viewWaiters(_t21: any) {
+    this.orderWaiDialog = true;
+  }
+  editWaiters(_t21: any) {
+    this.orderWaiDialog = true;
+  }
+  orderWaiDialog: boolean = false;
   editDetail(orderdetail: OrderDetail) {
     this.currentDetail = {} as OrderDetail;
     this.orderDetDialog = true;
@@ -30,7 +37,6 @@ export class Details extends Common {
     this.currentDetail.order_id = orderdetail.order_id;
     this.currentDetail.product_id = orderdetail.product_id;
     this.currentDetail.quantity = orderdetail.quantity;
-    this.currentDetail.price = orderdetail.price;
     this.currentDetail.type = orderdetail.type;
     this.currentDetail.observation = orderdetail.observation;
     this.currentid = orderdetail.id;
@@ -51,9 +57,11 @@ export class Details extends Common {
   }
   details: OrderDetail[] = [];
   @Input() order!: Order;
+  @Input() view!: boolean;
   constructor(private detailservice: OrderDetailsApi,
     private messageService: MessageService,
-    private productService: ProductsApiService
+    private productService: ProductsApiService,
+    private confirmationService: ConfirmationService
   ) {
     super();
   }
@@ -86,11 +94,15 @@ export class Details extends Common {
   hideDialog() {
     this.orderDetDialog = false;
   }
-  
+  hideDialogw() {
+    this.orderWaiDialog = false;
+  }
+
   ngOnInit() {
-    this.getOrderDetails();
+    //this.getOrderDetails();
     this.getDetailType();
     this.getProducts();
+    this.details = this.order.details;
   }
   getOrderDetails() {
     this.detailservice.getOrderDetails(this.order.id).subscribe({
@@ -135,12 +147,20 @@ export class Details extends Common {
   }
 
   deleteDetail(orderDetail: OrderDetail) {
-    this.detailservice.deleteDetail(orderDetail.id).subscribe({
-      next: (response) => {
-        this.getOrderDetails();
-      },
-      error: (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error deleting order detail' });
+    this.confirmationService.confirm({
+      message: 'Are you sure you want delete order detail ?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+
+        this.detailservice.deleteDetail(orderDetail.id).subscribe({
+          next: (response) => {
+            this.getOrderDetails();
+          },
+          error: (error) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error deleting order detail' });
+          }
+        });
       }
     });
   }

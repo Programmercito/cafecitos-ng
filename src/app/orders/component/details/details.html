@@ -1,6 +1,7 @@
 <p-table #dt [value]="details" [paginator]="false" [lazy]="true"
     [tableStyle]="{ 'min-width': '35rem' }">
     <ng-template #caption>
+        @if(!view){
         <div class="flex items-center justify-between gap-2">
             <h5 class="m-0">Productos</h5>
             @if(order.status === 'OPEN' && (this.getCurrentUser().id ===
@@ -9,10 +10,12 @@
                 class="mr-2" (onClick)="openNew()" />
             }
         </div>
+        }
     </ng-template>
 
     <ng-template #header>
         <tr>
+
             <th style="min-width: 3rem"> </th>
             <th style="min-width: 2rem">Producto</th>
             <th style="min-width: 2rem">Cantidad</th>
@@ -23,17 +26,31 @@
     </ng-template>
     <ng-template #body let-orderdetail>
         <tr>
+
             <td>
                 @if(order.status === 'OPEN' && (this.getCurrentUser().type ===
-                'IN_CHARGE' ||this.getCurrentUser().type === 'IN_CHARGE')){
+                'IN_CHARGE' ||this.getCurrentUser().type === 'IN_CHARGE') &&
+                !view){
                 <p-button icon="pi pi-pencil" severity="info" class="mr-2"
                     (click)="editDetail(orderdetail)"
                     pTooltip="Edit detail"></p-button>
-                <p-button icon="pi pi-pencil" severity="danger" class="mr-2"
+                <p-button icon="pi pi-times" severity="danger" class="mr-2"
                     (click)="deleteDetail(orderdetail)"
                     pTooltip="Delete detail"></p-button>
                 }
+                @if (!view && orderdetail.type === 'WAITER'){
+                <p-button icon="pi pi-user" severity="help" class="mr-2"
+                    (click)="editWaiters(orderdetail)"
+                    pTooltip="Waiters"></p-button>
+                }
+                @if (view && orderdetail.type === 'WAITER'){
+                <p-button icon="pi pi-user" severity="success" class="mr-2"
+                    (click)="viewWaiters(orderdetail)"
+                    pTooltip="view Waiters"></p-button>
+                }
+
             </td>
+
             <td>{{orderdetail.product.description}}
                 {{orderdetail.type==='CLIENT'?
                 orderdetail.product.client_price:orderdetail.type==='WAITER'?orderdetail.product.waiter_price:orderdetail.product.animation_price}}
@@ -65,7 +82,8 @@
     </ng-template>
 </p-table>
 <p-dialog [(visible)]="orderDetDialog" [breakpoints]="{'768px': '100vw'}"
-    [style]="{width: '50vw'}" header="Productos" (onHide)="hideDialog()"
+    [style]="{width: '60vw', height: '80vh'}" header="Productos"
+    (onHide)="hideDialog()"
     closable="false" modal="true">
     <ng-template pTemplate="content">
         <div class="flex flex-col gap-6">
@@ -119,6 +137,19 @@
             (click)="hideDialog()"></p-button>
         <p-button label="Save" icon="pi pi-check"
             (click)="saveDetail()"></p-button>
+    </ng-template>
+
+</p-dialog>
+<p-dialog [(visible)]="orderWaiDialog" [breakpoints]="{'768px': '100vw'}"
+    [style]="{width: '60vw', height: '80vh'}" header="Waiters"
+    (onHide)="hideDialog()"
+    closable="false" modal="true">
+    <ng-template pTemplate="content">
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <p-button label="Close" icon="pi pi-times" severity="secondary"
+            (click)="hideDialogw()"></p-button>
     </ng-template>
 
 </p-dialog>

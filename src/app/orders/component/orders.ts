@@ -32,19 +32,26 @@ import { Details } from "./details/details";
     SelectModule, InputTextModule, DialogModule, ToastModule, ConfirmDialogModule,
     CurrencyPipe, TagModule, DatePipe, DatePickerModule, TooltipModule,
     Details
-],
+  ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './orders.html',
   styleUrl: './orders.scss'
 })
 export class Orders extends Common implements OnInit {
+  viewOrder(order: Order) {
+    this.currentOrder = order;
+    this.orderDialog = true;
+    this.view = true;
+  }
 
   orderDialog: boolean = false;
   submitted: boolean = false;
   currentOrder!: Order;
+  view: boolean = false;
 
   openNew() {
     this.submitted = false;
+    this.view = false;
     this.ordersService.createOrder().subscribe({
       next: (order) => {
         this.currentOrder = order;
@@ -68,6 +75,7 @@ export class Orders extends Common implements OnInit {
   pagination!: Pagination;
   first: number = 0;
   total!: number;
+
 
   statusItems = [
     { label: 'All', value: '' },
@@ -150,13 +158,18 @@ export class Orders extends Common implements OnInit {
   }
 
   editOrder(order: Order) {
-    this.currentOrder = { ...order };
+    this.currentOrder = order;
     this.orderDialog = true;
+    this.view = false;
   }
 
   hideDialog() {
     this.orderDialog = false;
     this.submitted = false;
+
+  }
+  onHide() {
+    this.getOrders();
   }
 
   closeOrder(order: Order) {

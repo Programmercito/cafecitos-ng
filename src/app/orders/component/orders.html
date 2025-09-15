@@ -88,7 +88,10 @@
                     (click)="voidedOrder(order)"
                     pTooltip="Voided Order"></p-button>
                 }
-
+                <p-button icon="pi pi-eye" severity="success"
+                    class="mr-2"
+                    (click)="viewOrder(order)"
+                    pTooltip="View Order"></p-button>
             </td>
             <td>
                 <p-tag [value]="order.status"
@@ -105,7 +108,7 @@
 </p-table>
 
 <p-dialog [(visible)]="orderDialog" [breakpoints]="{'768px': '100vw'}"
-    [style]="{width: '60vw'}"
+    [style]="{width: '90vw', height: '90vh'}" (onHide)="onHide()"
     header="Order Details" [modal]="true">
     <ng-template pTemplate="content">
         <div class="flex flex-row flex-wrap gap-4">
@@ -130,7 +133,7 @@
 
         </div>
         <div class="mt-4">
-            <app-details [order]="currentOrder"></app-details>
+            <app-details [order]="currentOrder" [view]="view"></app-details>
         </div>
     </ng-template>
     <ng-template pTemplate="footer">
