@@ -83,7 +83,7 @@
 </p-table>
 <p-dialog [(visible)]="orderDetDialog" [breakpoints]="{'768px': '100vw'}"
     [style]="{width: '60vw', height: '80vh'}" header="Productos"
-    (onHide)="hideDialog()"
+    (onHide)="onhideDialog()"
     closable="false" modal="true">
     <ng-template pTemplate="content">
         <div class="flex flex-col gap-6">
@@ -142,8 +142,8 @@
 </p-dialog>
 <p-dialog [(visible)]="orderWaiDialog" [breakpoints]="{'768px': '100vw'}"
     [style]="{width: '60vw', height: '80vh'}" header="Waiters"
-    (onHide)="hideDialog()"
-    closable="false" modal="true">
+    (onHide)="onhideDialogw()"
+    closable="false" modal="true" styleClass="flex flex-col" [contentStyle]="{ 'flex-grow': '1' }">
     <ng-template pTemplate="content">
         <app-waiters [orderdet]="currentDetail" [view]="view"></app-waiters>
     </ng-template>

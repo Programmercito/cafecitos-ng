@@ -24,10 +24,13 @@ import { Waiters } from "../waiters/waiters";
   styleUrl: './details.scss'
 })
 export class Details extends Common {
-  viewWaiters(_t21: any) {
+
+  viewWaiters(orderdetail: OrderDetail) {
+    this.currentDetail = orderdetail;
     this.orderWaiDialog = true;
   }
-  editWaiters(_t21: any) {
+  editWaiters(orderdetail: OrderDetail) {
+    this.currentDetail = orderdetail;
     this.orderWaiDialog = true;
   }
   orderWaiDialog: boolean = false;
@@ -165,5 +168,10 @@ export class Details extends Common {
       }
     });
   }
-
+  onhideDialogw() {
+    this.getOrderDetails();
+  }
+  onhideDialog() {
+    this.getOrderDetails();
+  }
 }

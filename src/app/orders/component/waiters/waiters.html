@@ -1,41 +1,56 @@
- <div class="flex flex-col gap-6">
-    <div>
-        <label for="type" class="block font-bold mb-3">Waiter</label>
-        <p-select [options]="waiters"
-            [(ngModel)]="waiter"
-            optionLabel="description" [filter]="true"
-            filterBy="description"
-            [showClear]="true" placeholder="Select a Waiter" fluid
-            class="w-full md:w-56">
-            <ng-template #selectedItem let-selectedOption>
-                <div class="flex items-center gap-2">
-                    <div>{{ selectedOption.username }}</div>
-                </div>
-            </ng-template>
-            <ng-template let-waiter #item>
-                <div class="flex items-center gap-2">
-                    <div>{{ waiter.firstname }} {{ waiter.lastname }}</div>
-                </div>
-            </ng-template>
-        </p-select>
+<div class="h-full flex flex-col">
+    @if(!this.view){
+    <div class="flex flex-col gap-6">
+        <div>
+            <label for="type" class="block font-bold mb-3">Waiter</label>
+            <p-select [options]="waiters"
+                [(ngModel)]="waiter"
+                optionLabel="first_name" [filter]="true"
+                filterBy="username"
+                [showClear]="true" placeholder="Select a Waiter" fluid
+                class="w-full md:w-56">
+                <ng-template #selectedItem let-selectedOption>
+                    <div class="flex items-center gap-2">
+                        <div>{{ selectedOption.username }}</div>
+                    </div>
+                </ng-template>
+                <ng-template let-waiter #item>
+                    <div class="flex items-center gap-2">
+                        <div>{{ waiter.username }} {{ waiter.first_name }} {{
+                            waiter.last_name }}</div>
+                    </div>
+                </ng-template>
+            </p-select>
+        </div>
+        <p-button label="Add" icon="pi pi-plus" severity="secondary"
+            (click)="addWaiter()"></p-button>
     </div>
+    }
+    <p-table #dt [value]="this.orderswaiters" [paginator]="false" [lazy]="true"
+        [tableStyle]="{ 'min-width': '35rem' }" [scrollable]="true"
+        scrollHeight="flex">
+
+        <ng-template #header>
+            <tr>
+                @if (!view){
+                <th style="min-width: 3rem"> </th>
+                }
+                <th style="min-width: 2rem">Waiter</th>
+                <th style="min-width: 2rem">Comision</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-orderwaiter>
+            <tr>
+                @if (!view){
+                <td>
+                    <p-button icon="pi pi-times" severity="danger"
+                        (click)="deleteWaiter(orderwaiter)"></p-button>
+                </td>
+                }
+                <td>{{orderwaiter.waiter.first_name}}
+                    {{orderwaiter.waiter.last_name}}</td>
+                <td>{{orderwaiter.comision}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
 </div>
-<p-table #dt [value]="this.orderswaiters" [paginator]="false" [lazy]="true"
-    [tableStyle]="{ 'min-width': '35rem' }">
-
-    <ng-template #header>
-        <tr>
-            <th style="min-width: 3rem"> </th>
-            <th style="min-width: 2rem">Waiter</th>
-            <th style="min-width: 2rem">Comision</th>
-        </tr>
-    </ng-template>
-    <ng-template #body let-orderwaiter>
-        <tr>
-
-            <td></td>
-            <td>{{orderwaiter.waiter.first_name}} {{orderwaiter.waiter.last_name}}</td>
-            <td>{{orderwaiter.comision}}</td>
-        </tr>
-    </ng-template>
-</p-table>
