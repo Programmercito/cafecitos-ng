@@ -41,7 +41,8 @@
         </ng-template>
         <ng-template #body let-orderwaiter>
             <tr>
-                @if (!view){
+                @if (!view && (this.getCurrentUser().type == 'IN_CHARGE' ||
+                this.getCurrentUser().type == 'ADMINISTRATOR')){
                 <td>
                     <p-button icon="pi pi-times" severity="danger"
                         (click)="deleteWaiter(orderwaiter)"></p-button>

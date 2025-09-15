@@ -23,7 +23,8 @@ import { SortIcon } from 'primeng/table';
 import { DatePickerModule } from 'primeng/datepicker';
 import { Common } from '@/libs/components/Common';
 import { Details } from "./details/details";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UsersApiService } from '@/users/services/users-api';
 
 @Component({
   selector: 'app-orders',
@@ -39,6 +40,27 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './orders.scss'
 })
 export class Orders extends Common implements OnInit {
+  logout() {
+    sessionStorage.removeItem('user');
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to log out?',
+      header: 'Confirm Logout',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.usersService.logout().subscribe({
+          next: () => {
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Logged out successfully' });
+            this.router.navigate(['/auth/login']);
+          },
+          error: (err) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Logout failed' });
+          }
+        });
+      }
+    });
+
+
+  }
   viewOrder(order: Order) {
     this.currentOrder = order;
     this.orderDialog = true;
@@ -90,6 +112,8 @@ export class Orders extends Common implements OnInit {
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
+    private usersService: UsersApiService,
+    private router: Router
   ) {
     super();
   }

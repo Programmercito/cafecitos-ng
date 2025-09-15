@@ -29,7 +29,7 @@
 
             <td>
                 @if(order.status === 'OPEN' && (this.getCurrentUser().type ===
-                'IN_CHARGE' ||this.getCurrentUser().type === 'IN_CHARGE') &&
+                'IN_CHARGE' ||this.getCurrentUser().type === 'ADMINISTRATOR') &&
                 !view){
                 <p-button icon="pi pi-pencil" severity="info" class="mr-2"
                     (click)="editDetail(orderdetail)"

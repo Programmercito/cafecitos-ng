@@ -102,8 +102,7 @@ export class AppTopbar extends Common implements OnInit {
                 this.usersService.logout().subscribe({
                     next: () => {
                         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Logged out successfully' });
-
-
+                        this.router.navigate(['/auth/login']);
                     },
                     error: (err) => {
                         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Logout failed' });
@@ -111,6 +110,6 @@ export class AppTopbar extends Common implements OnInit {
                 });
             }
         });
-        this.router.navigate(['/auth/login']);
+
     }
 }

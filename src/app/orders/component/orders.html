@@ -3,8 +3,7 @@
 
 <p-toolbar>
     <ng-template #start>
-        @if((this.getCurrentUser().type === 'WAITER' ||
-        this.getCurrentUser().type === 'IN_CHARGE') && this.typeorders==='me'){
+        @if(this.typeorders==='me'){
         <p-button label="New" icon="pi pi-plus" severity="secondary"
             class="mr-2" (onClick)="openNew()" />
         }
@@ -61,7 +60,8 @@
             <td>
                 @if (this.typeorders==='me'){
                 @if(order.status === 'OPEN' && (this.getCurrentUser().id ===
-                order.waiter.id || this.getCurrentUser().type === 'IN_CHARGE')){
+                order.waiter.id || (this.getCurrentUser().type === 'IN_CHARGE'
+                || this.getCurrentUser().type === 'ADMINISTRATOR'))){
                 <p-button icon="pi pi-pencil" severity="info" class="mr-2"
                     (click)="editOrder(order)" pTooltip="Edit Order"></p-button>
                 }
@@ -139,7 +139,10 @@
         </div>
     </ng-template>
     <ng-template pTemplate="footer">
+        <p-button label="Cerrar Session" icon="pi pi-times" severity="danger"
+            (click)="logout()"></p-button>
         <p-button label="Close" icon="pi pi-times" severity="secondary"
             (click)="hideDialog()"></p-button>
+
     </ng-template>
 </p-dialog>

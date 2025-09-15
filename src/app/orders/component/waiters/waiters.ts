@@ -8,6 +8,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { SelectModule } from "primeng/select";
 import { TableModule } from "primeng/table";
 import { Button } from "primeng/button";
+import { Common } from '@/libs/components/Common';
 
 @Component({
   selector: 'app-waiters',
@@ -15,7 +16,7 @@ import { Button } from "primeng/button";
   templateUrl: './waiters.html',
   styleUrl: './waiters.scss'
 })
-export class Waiters {
+export class Waiters extends Common {
 
   addWaiter() {
     this.orderWaiter = {} as OrderWaiter;
@@ -46,7 +47,7 @@ export class Waiters {
     private orderswaitersservice: OrderWaiterApi,
     private confirmationService: ConfirmationService
   ) {
-
+    super();
   }
   ngOnInit() {
     this.getWaiters();
