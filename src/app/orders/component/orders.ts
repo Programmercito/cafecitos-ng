@@ -25,6 +25,8 @@ import { Common } from '@/libs/components/Common';
 import { Details } from "./details/details";
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsersApiService } from '@/users/services/users-api';
+import { Commisions } from "./commisions/commisions";
+import { WaitersCommissions } from '@/libs/models/waiters-commissions';
 
 @Component({
   selector: 'app-orders',
@@ -33,13 +35,15 @@ import { UsersApiService } from '@/users/services/users-api';
     ToolbarModule, ButtonModule, TableModule, IconFieldModule, InputIconModule,
     SelectModule, InputTextModule, DialogModule, ToastModule, ConfirmDialogModule,
     CurrencyPipe, TagModule, DatePipe, DatePickerModule, TooltipModule,
-    Details
+    Details,
+    Commisions
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './orders.html',
   styleUrl: './orders.scss'
 })
 export class Orders extends Common implements OnInit {
+  commisionDialog: boolean = false;
   logout() {
     sessionStorage.removeItem('user');
     this.confirmationService.confirm({
@@ -54,6 +58,7 @@ export class Orders extends Common implements OnInit {
           },
           error: (err) => {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Logout failed' });
+            this.router.navigate(['/auth/login']);
           }
         });
       }
@@ -71,6 +76,7 @@ export class Orders extends Common implements OnInit {
   submitted: boolean = false;
   currentOrder!: Order;
   view: boolean = false;
+  typedisabled: boolean = false;
 
   openNew() {
     this.submitted = false;
@@ -105,6 +111,7 @@ export class Orders extends Common implements OnInit {
     { label: 'Completed', value: 'completed' },
     { label: 'Cancelled', value: 'cancelled' },
   ];
+  commissions: WaitersCommissions[] = [];
   orderTypes: { name: string, value: string }[] = [];
 
   constructor(
@@ -115,7 +122,9 @@ export class Orders extends Common implements OnInit {
     private usersService: UsersApiService,
     private router: Router
   ) {
+
     super();
+
   }
 
   ngOnInit(): void {
@@ -127,7 +136,7 @@ export class Orders extends Common implements OnInit {
     this.loadOrderTypes();
     this.route.params.subscribe(params => {
       this.typeorders = params['typeorders'];
-
+      this.loadOrderTypes();
     });
 
 
@@ -137,9 +146,20 @@ export class Orders extends Common implements OnInit {
     this.ordersService.getOrderTypes().subscribe(types => {
       this.orderTypes = types;
       console.log(this.orderTypes);
-      if (this.orderTypes.length > 0) {
+      if (this.orderTypes.length > 0 && (this.typeorders === 'me' || this.typeorders === 'history')) {
         this.type = this.orderTypes[0].value;
+        this.typedisabled = false;
+      } else if (this.typeorders === 'commissiong') {
+        this.type = 'PAID';
+        this.typedisabled = true;
+      } else if (this.typeorders === 'processing') {
+        this.type = 'COMMISSIONING';
+        this.typedisabled = true;
+      } else if (this.typeorders === 'processed') {
+        this.type = 'PROCESSED';
+        this.typedisabled = true;
       }
+
       this.getOrders();
     });
   }
@@ -254,6 +274,55 @@ export class Orders extends Common implements OnInit {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
           }
         });
+      }
+    });
+  }
+  commisioning() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want commisioning orders?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.ordersService.moveToCommissiong().subscribe({
+          next: () => {
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Orders mark how to commissioning', life: 3000 });
+            this.getOrders();
+          },
+          error: (err) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
+          }
+        });
+      }
+    });
+  }
+  processing() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want processing orders?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.ordersService.moveToProcessed().subscribe({
+          next: () => {
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order mark how to processing', life: 3000 });
+            this.getOrders();
+          },
+          error: (err) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
+          }
+        });
+      }
+    });
+  }
+  commisions() {
+    const d_from = this.date_from ? new Date(this.date_from).toISOString().split('T')[0] : undefined;
+    const d_to = this.date_to ? new Date(this.date_to).toISOString().split('T')[0] : undefined;
+    this.ordersService.getCommissions(this.type, d_from, d_to, 'asc').subscribe({
+      next: (response) => {
+        this.commissions = response;
+        this.commisionDialog = true;
+      },
+      error: (error) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error fetching commissions' });
       }
     });
   }

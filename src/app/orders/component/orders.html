@@ -32,12 +32,29 @@
     <ng-template #caption>
         <div class="flex items-center justify-between">
             <h5 class="m-0">Manage Orders</h5>
-            <div>
-
+            <div class="flex items-center gap-2">
+                @if (this.typeorders==='commissiong' ||
+                this.typeorders==='processing' ||
+                this.typeorders==='processed'){
+                <p-button icon="pi pi-eye" severity="info"
+                    (click)="commisions()" label
+                    pTooltip="View commissions"></p-button>
+                }
+                @if (this.typeorders==='commissiong'){
+                <p-button icon="pi pi-dollar" severity="success"
+                    label="Commisioning"
+                    (click)="commisioning()"
+                    pTooltip="Commisionning Orders"></p-button>
+                }@else if (this.typeorders==='processing'){
+                <p-button icon="pi pi-wallet" severity="success"
+                    (click)="processing()" label="Processing"
+                    pTooltip="Processing Orders"></p-button>
+                }
                 <p-select id="type" [(ngModel)]="type" [options]="orderTypes"
                     optionLabel="name" optionValue="value"
-                    (onChange)="getOrders()" placeholder="Select Type"
-                    class="w-full"></p-select>
+                    [disabled]="typedisabled"
+                    (onChange)="getOrders()"
+                    placeholder="Select Type"></p-select>
             </div>
         </div>
     </ng-template>
@@ -73,10 +90,13 @@
                 }
                 @if(order.status === 'CLOSED' &&
                 (
-                this.getCurrentUser().type === 'IN_CHARGE')){
+                this.getCurrentUser().type === 'IN_CHARGE' ||
+                this.getCurrentUser().type === 'ADMINISTRATOR')){
                 <p-button icon="pi pi-dollar" severity="success" class="mr-2"
                     (click)="paidOrder(order)"
                     pTooltip="Mark as Paid Order"></p-button>
+                }
+
                 }
                 @if(
                 (order.status === 'CLOSED' || order.status === 'PAID' ||
@@ -89,7 +109,7 @@
                     (click)="voidedOrder(order)"
                     pTooltip="Voided Order"></p-button>
                 }
-                }
+
                 <p-button icon="pi pi-eye" severity="success"
                     class="mr-2"
                     (click)="viewOrder(order)"
@@ -145,4 +165,9 @@
             (click)="hideDialog()"></p-button>
 
     </ng-template>
+</p-dialog>
+<p-dialog [(visible)]="commisionDialog" [breakpoints]="{'768px': '100vw'}"
+    [style]="{width: '90vw', height: '90vh'}" (onHide)="onHide()"
+    header="commissions" [modal]="true">
+    <app-commisions [lista]="this.commissions"></app-commisions>
 </p-dialog>

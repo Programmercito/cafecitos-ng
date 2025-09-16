@@ -106,6 +106,7 @@ export class AppTopbar extends Common implements OnInit {
                     },
                     error: (err) => {
                         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Logout failed' });
+                        this.router.navigate(['/auth/login']);
                     }
                 });
             }

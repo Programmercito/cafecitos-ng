@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedResponse } from '@/libs/models/paginated-response.model';
 import { Order } from '@/libs/models/order.model';
+import { WaitersCommissions } from '@/libs/models/waiters-commissions';
 
 @Injectable({
   providedIn: 'root'
@@ -59,5 +60,35 @@ export class OrdersApiService {
   }
   voidedOrder(orderId: number): Observable<Order> {
     return this.http.patch<Order>(`/api/orders/${orderId}/status/VOIDED`, {});
+  }
+  moveToCommissiong(): Observable<any> {
+    return this.http.put('/api/orders/move-to-commissiong', {});
+  }
+  moveToProcessed(): Observable<any> {
+    return this.http.put('/api/orders/move-to-processed', {});
+  }
+
+
+  getCommissions(
+    status?: string,
+    date_from?: string,
+    date_to?: string,
+    sort?: string,
+  ): Observable<WaitersCommissions[]> {
+    let params = new HttpParams();
+
+    if (date_from) {
+      params = params.set('date_from', date_from);
+    }
+    if (date_to) {
+      params = params.set('date_to', date_to);
+    }
+    if (sort) {
+      params = params.set('sort', sort);
+    }
+    if (status) {
+      params = params.set('status', status);
+    }
+    return this.http.get<WaitersCommissions[]>('/api/orders/waiter-commissions', { params });
   }
 }

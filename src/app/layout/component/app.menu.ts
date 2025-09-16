@@ -56,28 +56,20 @@ export class AppMenu {
                     {
                         label: 'Comisionado',
                         icon: 'pi pi-fw pi-dollar',
-                        routerLink: ['/orders']
+                        routerLink: ['/orders/commissiong']
+                    },
+                    {
+                        label: 'Procesando',
+                        icon: 'pi pi-fw pi-check-circle',
+                        routerLink: ['/orders/processing']
                     },
                     {
                         label: 'Procesado',
                         icon: 'pi pi-fw pi-check-circle',
-                        routerLink: ['/history']
+                        routerLink: ['/orders/processed']
                     },
                 ]
-            },
-            {
-                label: 'Reportes',
-                icon: 'pi pi-fw pi-briefcase',
-                routerLink: ['/orders'],
-                items: [
-                    {
-                        label: 'Historico',
-                        icon: 'pi pi-fw pi-clock',
-                        routerLink: ['/reportes']
-                    },
-
-                ]
-            },
+            }
         ];
     }
 }
