@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AppMenuitem } from './app.menuitem';
+import { Common } from '@/libs/components/Common';
 
 @Component({
     selector: 'app-menu',
@@ -15,10 +16,12 @@ import { AppMenuitem } from './app.menuitem';
         </ng-container>
     </ul> `
 })
-export class AppMenu {
+export class AppMenu extends Common {
+
     model: MenuItem[] = [];
 
     ngOnInit() {
+        const type = this.getCurrentUser().type;
         this.model = [
             {
                 label: 'Principal',
@@ -26,7 +29,7 @@ export class AppMenu {
             },
             {
                 label: 'Administracion',
-                                items: [
+                items: [
                     { label: 'Productos', icon: 'pi pi-fw pi-box', routerLink: ['/products'] },
                     { label: 'Usuarios', icon: 'pi pi-fw pi-user', routerLink: ['/users'] },
                 ]
@@ -71,5 +74,10 @@ export class AppMenu {
                 ]
             }
         ];
+
+        if (type !== 'ADMINISTRATOR') {
+            this.model = this.model.filter(item => item.label === 'Ordenes');
+        }
     }
 }
+
