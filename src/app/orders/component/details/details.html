@@ -84,7 +84,7 @@
 <p-dialog [(visible)]="orderDetDialog" [breakpoints]="{'768px': '100vw'}"
     [style]="{width: '60vw', height: '80vh'}" header="Productos"
     (onHide)="onhideDialog()"
-    closable="false" modal="true">
+    closable="false" modal="true" styleClass="flex flex-col" [contentStyle]="{ 'flex-grow': '1' }">
     <ng-template pTemplate="content">
         <div class="flex flex-col gap-6">
             <div>
