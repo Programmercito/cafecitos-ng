@@ -19,6 +19,7 @@ export interface OrderDetail {
     observation: string;
     product: ProductsModel;
     order_waiters: OrderWaiter[];
+    entregado: number;
 }
 
 export interface Order {

@@ -79,9 +79,9 @@ export class Login {
         });
 
     }
-    username: string = 'mesero';
+    username: string = '';
 
-    password: string = '12345678';
+    password: string = '';
 
     checked: boolean = false;
 }

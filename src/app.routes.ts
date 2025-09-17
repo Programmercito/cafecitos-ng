@@ -8,6 +8,7 @@ import { Products } from '@/products/component/products';
 import { Users } from './app/users/component/users';
 import { ChangePassword } from './app/change-password/component/change-password';
 import { Orders } from './app/orders/component/orders';
+import { Pendings } from '@/orders/component/pendings/pendings';
 
 
 export const appRoutes: Routes = [
@@ -15,7 +16,7 @@ export const appRoutes: Routes = [
         path: '',
         component: AppLayout,
         children: [
-            { path: '', component: Dashboard },
+            { path: '', component: Pendings },
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') },
