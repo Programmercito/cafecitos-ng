@@ -122,8 +122,16 @@
 
             <td>{{order.waiter.first_name}} {{order.waiter.last_name}}</td>
             <td>{{order.order_date | date:'yyyy-MM-dd'}}</td>
-            <td>{{order.price_final | currency:'USD'}}</td>
-            <td>{{order.waiter_comision ?? 0 | currency:'USD'}}</td>
+            <td>
+                <div class="text-right">
+                    {{order.price_final | currency:'USD':''}}
+                </div>
+            </td>
+            <td>
+                <div class="text-right">
+                    {{order.waiter_comision ?? 0 | currency:'USD':''}}
+                </div>
+            </td>
             <td>{{order.updated_at | date:'yyyy-MM-dd'}}</td>
         </tr>
     </ng-template>

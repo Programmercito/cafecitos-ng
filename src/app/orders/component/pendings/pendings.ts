@@ -8,15 +8,24 @@ import { OrderDetailsApi } from '@/orders/services/order-details-api';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { OrderDetail } from '@/libs/models/order.model';
 import { ButtonModule } from "primeng/button";
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-pendings',
-  imports: [Toast, ConfirmDialogModule, TableModule, ButtonModule],
+  imports: [Toast, ConfirmDialogModule, TableModule, ButtonModule, FormsModule],
   templateUrl: './pendings.html',
   styleUrl: './pendings.scss',
   providers: [MessageService, ConfirmationService]
 })
 export class Pendings extends Common implements OnInit {
+  ngclass(row: OrderDetail) {
+    const colorlist: string[] = this.getArrayColors();
+    const indice = (row.order_id % colorlist.length);
+    const color = colorlist[indice];
+    const style = "!bg-primary-" + color + " !text-primary-contrast";
+    return style;
+  }
+
   refresh() {
     this.getPendings();
   }
@@ -48,7 +57,7 @@ export class Pendings extends Common implements OnInit {
   }
   entregadoDetail(detail: OrderDetail) {
     this.confirmationservice.confirm({
-      message: 'Are you sure you want processing orders?',
+      message: 'Would you like to mark the order as delivered?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

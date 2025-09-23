@@ -19,7 +19,7 @@ import { Waiters } from "../waiters/waiters";
 
 @Component({
   selector: 'app-details',
-  imports: [TableModule, FormsModule, ButtonModule, DialogModule, SelectModule, InputNumberModule, InputTextModule, Waiters],
+  imports: [TableModule, FormsModule, ButtonModule, DialogModule, SelectModule, InputNumberModule, InputTextModule, Waiters, CurrencyPipe],
   templateUrl: './details.html',
   styleUrl: './details.scss'
 })

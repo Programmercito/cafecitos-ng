@@ -130,7 +130,7 @@ export class Orders extends Common implements OnInit {
   ngOnInit(): void {
     const tod = new Date();
     const today = new Date(new Date().setDate(tod.getDate() + 1));
-    const twoWeeksAgo = new Date(new Date().setDate(today.getDate() - 20));
+    const twoWeeksAgo = new Date(new Date().setDate(today.getDate() - 60));
     this.date_to = today.toISOString().substring(0, 10);
     this.date_from = twoWeeksAgo.toISOString().substring(0, 10);
     this.loadOrderTypes();
@@ -279,7 +279,7 @@ export class Orders extends Common implements OnInit {
   }
   commisioning() {
     this.confirmationService.confirm({
-      message: 'Are you sure you want commisioning orders?',
+      message: 'Are you sure you want to commission the orders? Remember that all orders in a "paid" status will change to "commissioning," not just the ones you see on the screen. ',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
@@ -297,7 +297,7 @@ export class Orders extends Common implements OnInit {
   }
   processing() {
     this.confirmationService.confirm({
-      message: 'Are you sure you want processing orders?',
+      message: 'Are you sure you want to process the orders? Remember that all orders in a "commissioning" status will change to "processed," not just the ones you see on the screen.',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

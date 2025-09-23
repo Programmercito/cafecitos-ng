@@ -1,10 +1,11 @@
 import { WaitersCommissions } from '@/libs/models/waiters-commissions';
+import { CurrencyPipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-commisions',
-  imports: [TableModule],
+  imports: [TableModule, CurrencyPipe],
   templateUrl: './commisions.html',
   styleUrl: './commisions.scss'
 })

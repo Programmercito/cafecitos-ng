@@ -1,11 +1,11 @@
 <p-table #dt [value]="this.lista" [paginator]="false" [lazy]="true"
-    [tableStyle]="{ 'min-width': '35rem' }">
+    [rowHover]="true">
 
     <ng-template #header>
         <tr>
-            <th style="min-width: 2rem">Waiter</th>
-            <th style="min-width: 2rem">Profits</th>
-            <th style="min-width: 2rem">Commission</th>
+            <th class="w-4/5">Waiter</th>
+            <th>Profits</th>
+            <th>Commission</th>
         </tr>
     </ng-template>
     <ng-template #body let-commi>
@@ -15,11 +15,11 @@
                 {{commi.waiter.last_name}}</td>
             <td>
                 <div class="text-right">
-                    {{commi.price}} </div>
+                    {{commi.price | currency:'':''}} </div>
             </td>
             <td>
                 <div class="text-right">
-                    {{commi.waiter_comision}} </div>
+                    {{commi.waiter_comision | currency:'':''}} </div>
             </td>
         </tr>
     </ng-template>
@@ -28,7 +28,7 @@
             <td></td>
             <td>
                 <div class="text-right">
-                    Total: {{this.getProfitsTotal() }}
+                    Total: {{this.getProfitsTotal() | currency:'':''}}
                 </div>
             </td>
         </tr>

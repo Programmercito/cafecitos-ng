@@ -28,7 +28,7 @@ this.getCurrentUser().type === 'IN_CHARGE'){
         </tr>
     </ng-template>
     <ng-template #body let-detail>
-        <tr>
+        <tr [class]="ngclass(detail)">
             <td>
                 <p-button icon="pi pi-pencil" severity="info" class="mr-2"
                     (click)="entregadoDetail(detail)"
